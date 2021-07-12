@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@server-util/*": ["util/*"]
+    }
+  },
+  "include": ["./src"]
+}
