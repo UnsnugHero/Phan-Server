@@ -1,24 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const requestCommentSchema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  text: {
-    type: String,
-    required: true
-  },
-  postedDate: {
-    type: Date,
-    default: Date.now
-  },
-  edited: {
-    type: Boolean,
-    default: false
-  },
-  likes: Number
-});
+import { requestCommentSchema } from './Comment';
 
 const requestSchema = new Schema({
   user: {

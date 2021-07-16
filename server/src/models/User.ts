@@ -1,12 +1,13 @@
 import { Schema, model } from 'mongoose';
 
-// Return to this - I don't think this is right
-// This cannot simply be an array of OIDs since all requests will have comments
-// that have OIDs that start from 0
 const likedCommentSchema = new Schema({
   request: {
     type: Schema.Types.ObjectId,
     ref: 'Request'
+  },
+  comment: {
+    type: Schema.Types.ObjectId,
+    ref: 'RequestComment'
   }
 });
 
