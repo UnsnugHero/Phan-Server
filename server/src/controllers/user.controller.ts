@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { hash } from 'bcrypt';
 
 import { User } from '../models/User';
-import { ErrorHandler } from '../util/helpers';
 
 class UserController {
   public async createNewUser(req: Request, res: Response, next: NextFunction) {

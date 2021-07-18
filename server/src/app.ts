@@ -1,5 +1,5 @@
 import path from 'path';
-import express, { json, Request, Response, NextFunction } from 'express';
+import express, { json } from 'express';
 import * as dotenv from 'dotenv';
 
 import { connectDB } from './util/database';
