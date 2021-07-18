@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { hash } from 'bcrypt';
+import { omit } from 'lodash';
 
 import { User } from '../models/User';
 
@@ -9,15 +10,16 @@ class UserController {
       const { username, password, isAnonymous } = req.body;
       const encryptedPassword = await hash(password, 10);
 
-      const newUser = new User({
+      const newUser = await User.create({
         username,
         password: encryptedPassword,
         isAnonymous
       });
 
-      await newUser.save();
+      // get the JS object from the returned schema object and omit the password
+      const newUserResponse = omit(newUser.toObject(), ['password']);
 
-      res.status(200).json(newUser);
+      res.status(200).json(newUserResponse);
     } catch (error) {
       next(error);
     }

@@ -34,11 +34,4 @@ const userSchema = new Schema({
   likedComments: [likedCommentSchema]
 });
 
-userSchema.set('toJSON', {
-  // @ts-ignore
-  transform: (_doc, ret, _options) => {
-    return omit(ret, ['password']);
-  }
-});
-
 export const User = model('User', userSchema);
