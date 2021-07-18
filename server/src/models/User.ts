@@ -20,6 +20,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  isAnonymous: {
+    type: Boolean,
+    default: false
+  },
   dateCreated: {
     type: Date,
     default: Date.now
