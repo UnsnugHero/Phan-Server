@@ -1,9 +1,10 @@
 import path from 'path';
-import express, { json } from 'express';
+import express, { json, Request, Response, NextFunction } from 'express';
 import * as dotenv from 'dotenv';
 
 import { connectDB } from './util/database';
 import MainRouter from './routers/main.router';
+import Middleware from './middleware/middleware';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
@@ -24,6 +25,9 @@ server.app.use(json());
 
 // append api/ before all routes
 server.app.use('/api', server.router);
+
+// error middleware - this must be after routes
+server.app.use(Middleware.errorHandler);
 
 // listen on port
 const port = process.env.PORT || 5000;

@@ -6,11 +6,7 @@
     "outDir": "./dist",
     "strict": true,
     "baseUrl": "./src",
-    "paths": {
-      "@server-util/*": ["./util/*"],
-      "@server-routes/*": ["./routes/*"],
-      "@server-models/*": ["./models/*"]
-    },
+    "paths": {},
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true

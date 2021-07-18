@@ -1,15 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { hash } from 'bcrypt';
 
 import { User } from '../models/User';
-import { handleError } from '../util/helpers';
+import { ErrorHandler } from '../util/helpers';
 
 class UserController {
-  public getTest(req: Request, res: Response) {
-    res.status(200).json({ classic: 'wow' });
-  }
-
-  public async createNewUser(req: Request, res: Response) {
+  public async createNewUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password, isAnonymous } = req.body;
       const encryptedPassword = await hash(password, 10);
@@ -24,7 +20,7 @@ class UserController {
 
       res.status(200).json(newUser);
     } catch (error) {
-      handleError(res, error.message, 500, 'Server Error');
+      next(error);
     }
   }
 }

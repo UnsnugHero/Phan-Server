@@ -15,8 +15,6 @@ class UserRouter {
   }
 
   private _initializeRoutes() {
-    this._router.get('/', this._controller.getTest);
-
     this._router.post('/create', this._controller.createNewUser);
   }
 }
