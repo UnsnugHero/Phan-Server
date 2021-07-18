@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+import { omit } from 'lodash';
+
 const likedCommentSchema = new Schema({
   request: {
     type: Schema.Types.ObjectId,
@@ -30,6 +32,13 @@ const userSchema = new Schema({
   },
   likedRequests: [Schema.Types.ObjectId],
   likedComments: [likedCommentSchema]
+});
+
+userSchema.set('toJSON', {
+  // @ts-ignore
+  transform: (_doc, ret, _options) => {
+    return omit(ret, ['password']);
+  }
 });
 
 export const User = model('User', userSchema);
