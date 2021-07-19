@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 
 import { connectDB } from './util/database';
 import MainRouter from './routers/main.router';
-import Middleware from './middleware/middleware';
+import { errorHandler } from './middleware';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
@@ -26,8 +26,8 @@ server.app.use(json());
 // append api/ before all routes
 server.app.use('/api', server.router);
 
-// error middleware - this must be after routes
-server.app.use(Middleware.errorHandler);
+// error handler middleware - this must be after routes
+server.app.use(errorHandler);
 
 // listen on port
 const port = process.env.PORT || 5000;

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import UserController from '../controllers/user.controller';
+import { validatorMiddleware } from '../middleware/validators/index';
 
 class UserRouter {
   private _router = Router();
@@ -15,7 +16,7 @@ class UserRouter {
   }
 
   private _initializeRoutes() {
-    this._router.post('/create', this._controller.createNewUser);
+    this._router.post('/create', validatorMiddleware('createUser'), this._controller.createNewUser);
   }
 }
 
