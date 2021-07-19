@@ -6,8 +6,11 @@ import { Result, ValidationError } from 'express-validator';
  *************************************/
 
 export type ValidatorType =
+  // Auth Validations
+  | 'login'
+
   // User Validations
-  'createUser';
+  | 'createUser';
 
 /*************************************
  * INTERFACES

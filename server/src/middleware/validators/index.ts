@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
+import { loginValidators } from '../validators/auth.validators';
 import { createUserValidators } from '../validators/users.validators';
 import { ValidatorType } from '../../types/index';
 import { CustomError } from '../../util/helpers';
@@ -10,6 +11,10 @@ import { CustomError } from '../../util/helpers';
  */
 const validatorMap = (validatorType?: ValidatorType) => {
   switch (validatorType) {
+    // Auth Validation
+    case 'login':
+      return loginValidators;
+    // User Validation
     case 'createUser':
       return createUserValidators;
     default:
