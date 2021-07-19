@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 
 import { createUserValidators } from '../validators/users.validators';
 import { ValidatorType } from '../../types/index';
+import { CustomError } from '../../util/helpers';
 
 /**
  * Validator Map used to identify which middleware validators will be applied to the current route.
@@ -22,7 +23,7 @@ export const validatorMiddleware = (validatorType?: ValidatorType) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(799).send(errors);
+      throw new CustomError(400, 'Error validating request', errors);
     }
 
     next();
