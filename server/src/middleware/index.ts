@@ -14,7 +14,8 @@ export const errorHandler = (err: CustomError, _req: Request, res: Response, _ne
   const errorResponse: ErrorResponse = {
     status: 'error',
     statusCode: err.statusCode,
-    message: err.message
+    message: err.message,
+    error: err
   };
 
   if (err.validationErrors) {

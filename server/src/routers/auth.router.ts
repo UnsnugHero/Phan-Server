@@ -16,7 +16,7 @@ class AuthRouter {
   }
 
   private _initializeRoutes() {
-    this._router.get('/login', validatorMiddleware('login'), this._controller.login);
+    this._router.post('/login', validatorMiddleware('login'), this._controller.login);
   }
 }
 
