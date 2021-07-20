@@ -11,10 +11,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "src/util/*.ts",
-    "src/models/*.ts",
-    "src/controllers/*.ts",
-    "src/routers/*.ts"
-  ]
+  "include": ["src/**/*"]
 }
