@@ -12,13 +12,17 @@ const requestSchema = new Schema({
     required: true
   },
   description: {
-    type: String
+    type: String,
+    required: true
   },
   location: {
     type: String,
     required: true
   },
-  likes: Number,
+  likes: {
+    type: Number,
+    default: 0
+  },
   comments: [requestCommentSchema],
   postedDate: {
     type: Date,
@@ -32,7 +36,7 @@ const requestSchema = new Schema({
     type: Boolean,
     default: false
   },
-  isCompleted: {
+  completed: {
     type: Boolean,
     default: false
   }
