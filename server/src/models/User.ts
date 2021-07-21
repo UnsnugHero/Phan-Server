@@ -24,7 +24,7 @@ const userSchema = new Schema({
   },
   isAnonymous: {
     type: Boolean,
-    default: false
+    default: true
   },
   dateCreated: {
     type: Date,

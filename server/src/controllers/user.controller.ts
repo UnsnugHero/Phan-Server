@@ -5,6 +5,8 @@ import { omit } from 'lodash';
 import { User } from '../models/User';
 
 class UserController {
+  public async getUser(req: Request, res: Response, next: NextFunction) {}
+
   public async createNewUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password, isAnonymous } = req.body;
@@ -24,6 +26,8 @@ class UserController {
       next(error);
     }
   }
+
+  public async deleteUser(req: Request, res: Response, next: NextFunction) {}
 }
 
 export = new UserController();
