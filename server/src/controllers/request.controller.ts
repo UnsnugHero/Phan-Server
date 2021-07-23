@@ -30,10 +30,8 @@ class RequestController {
     const { ...requestFields } = req.body;
 
     // construct request
-    // TODO
-    // for user id we may want to use req.user.id, because we know it will exist
-    // otherwise this will not execute as the auth middleware will err out
-    const request: IPhanRequest = { ...requestFields };
+    const userId = req.user?.id;
+    const request: IPhanRequest = { ...requestFields, user: userId };
 
     // attempt creating new document
     try {
@@ -61,6 +59,8 @@ class RequestController {
       next(new GenericServerError());
     }
   }
+
+  public async searchRequests(req: Request, res: Response, next: NextFunction) {}
 }
 
 export = new RequestController();

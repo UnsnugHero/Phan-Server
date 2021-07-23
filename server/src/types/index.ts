@@ -29,7 +29,7 @@ export interface ErrorResponse {
 export interface RequestComment {}
 
 export interface IPhanRequest {
-  userId: string | ObjectId;
+  user: string | ObjectId;
   subject: string;
   description: string;
   location: string;

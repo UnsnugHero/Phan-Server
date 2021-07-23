@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import { authToken } from '../middleware';
 
 import RequestController from '../controllers/request.controller';
-import { validatorMiddleware } from '../middleware/validators/index';
 
 class RequestRouter {
   private _router = Router();
@@ -18,9 +18,10 @@ class RequestRouter {
   private _initializeRoutes() {
     // TODO determine which should be authenticated routes
     this._router.get('/:requestId', this._controller.getRequest);
-    this._router.post('/create', this._controller.createRequest);
-    this._router.put('/:requestId', this._controller.updateRequest);
-    this._router.delete('/:requestId', this._controller.deleteRequest);
+    this._router.post('/create', authToken, this._controller.createRequest);
+    this._router.post('/search', this._controller.searchRequests);
+    this._router.put('/:requestId', authToken, this._controller.updateRequest);
+    this._router.delete('/:requestId', authToken, this._controller.deleteRequest);
   }
 }
 
