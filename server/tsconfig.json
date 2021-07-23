@@ -9,7 +9,8 @@
     "paths": {},
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["./src/declarations"]
   },
   "include": ["src/**/*"]
 }

@@ -18,7 +18,6 @@ class AuthRouter {
 
   private _initializeRoutes() {
     this._router.get('/', authToken, (req: Request, res: Response) => {
-      // @ts-ignore
       res.status(200).send(req.user);
     });
     this._router.post('/login', validatorMiddleware('login'), this._controller.login);

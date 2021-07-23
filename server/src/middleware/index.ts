@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
+import { JwtPayload, verify } from 'jsonwebtoken';
 
 import { ErrorResponse } from '../types';
 import { CustomError } from '../util/helpers';
@@ -11,9 +11,7 @@ export const authToken = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const verified = verify(authHeader, process.env.SECRET_KEY as string);
-    // TODO: figure out later
-    // @ts-ignore
+    const verified = verify(authHeader, process.env.SECRET_KEY as string) as JwtPayload;
     req.user = verified.user;
     next();
   } catch (error) {
