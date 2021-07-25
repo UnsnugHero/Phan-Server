@@ -9,6 +9,9 @@ export const connectDB = async () => {
       useUnifiedTopology: true
     });
 
+    // return updated document rather than original on an update
+    mongoose.set('returnOriginal', false);
+
     console.log('Mongo Connected...');
   } catch (error) {
     console.error(error.message);

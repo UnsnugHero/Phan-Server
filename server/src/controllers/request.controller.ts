@@ -6,6 +6,10 @@ import { Request as PhanRequest } from '../models/Request';
 import { IPhanRequest } from '../types/index';
 
 class RequestController {
+  /*************************************
+   * Request CRUD
+   *************************************/
+
   public async getRequest(req: Request, res: Response, next: NextFunction) {
     const requestId: string = req.params.requestId;
 
@@ -43,7 +47,22 @@ class RequestController {
     }
   }
 
-  public async updateRequest(req: Request, res: Response, next: NextFunction) {}
+  public async updateRequest(req: Request, res: Response, next: NextFunction) {
+    const requestId: string = req.params.requestId;
+
+    try {
+      const newRequestData = { ...req.body, edited: true };
+      const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, newRequestData);
+
+      return res.status(200).json(updatedRequest);
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'Request not found'));
+      }
+      next(new GenericServerError());
+    }
+  }
 
   public async deleteRequest(req: Request, res: Response, next: NextFunction) {
     const requestId: string = req.params.requestId;
@@ -61,6 +80,10 @@ class RequestController {
   }
 
   public async searchRequests(req: Request, res: Response, next: NextFunction) {}
+
+  /*************************************
+   * Request Comments CRUD
+   *************************************/
 }
 
 export = new RequestController();
