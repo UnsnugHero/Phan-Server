@@ -6,7 +6,25 @@ import { User } from '../models/User';
 import { CustomError, GenericServerError } from '../util/helpers';
 
 class UserController {
-  public async getUser(req: Request, res: Response, next: NextFunction) {}
+  public async getUser(req: Request, res: Response, next: NextFunction) {
+    const userId: string = req.params.userId;
+
+    try {
+      const user = await User.findById(userId).select('-password');
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      return res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'User not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
 
   public async createNewUser(req: Request, res: Response, next: NextFunction) {
     try {
@@ -35,7 +53,7 @@ class UserController {
       const newUserData = { ...req.body };
       const updatedUser = await User.findByIdAndUpdate(userId, newUserData);
 
-      return res.status(200).json(updatedUser);
+      return res.status(200).json(omit(updatedUser.toObject(), ['password']));
     } catch (error) {
       console.error(error);
       if (error.kind === 'ObjectId') {
