@@ -26,7 +26,7 @@ class RequestController {
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
       }
-      next(new GenericServerError());
+      next(new GenericServerError(error));
     }
   }
 
@@ -43,7 +43,7 @@ class RequestController {
       return res.status(200).json(newRequest);
     } catch (error) {
       console.error(error);
-      next(new GenericServerError());
+      next(new GenericServerError(error));
     }
   }
 
@@ -60,7 +60,7 @@ class RequestController {
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
       }
-      next(new GenericServerError());
+      next(new GenericServerError(error));
     }
   }
 
@@ -75,7 +75,7 @@ class RequestController {
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
       }
-      next(new GenericServerError());
+      next(new GenericServerError(error));
     }
   }
 

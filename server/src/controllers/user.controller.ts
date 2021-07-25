@@ -3,6 +3,7 @@ import { hash } from 'bcrypt';
 import { omit } from 'lodash';
 
 import { User } from '../models/User';
+import { CustomError, GenericServerError } from '../util/helpers';
 
 class UserController {
   public async getUser(req: Request, res: Response, next: NextFunction) {}
@@ -24,6 +25,23 @@ class UserController {
       res.status(200).json(newUserResponse);
     } catch (error) {
       next(error);
+    }
+  }
+
+  public async updateUser(req: Request, res: Response, next: NextFunction) {
+    const userId: string = req.params.userId;
+
+    try {
+      const newUserData = { ...req.body };
+      const updatedUser = await User.findByIdAndUpdate(userId, newUserData);
+
+      return res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'User not found'));
+      }
+      next(new GenericServerError(error));
     }
   }
 

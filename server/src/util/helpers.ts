@@ -1,16 +1,23 @@
 import { Result, ValidationError } from 'express-validator';
 
-export class GenericServerError extends Error {
-  public statusCode: number = 500;
-  public message: string = 'Server Error';
+export class CustomError extends Error {
+  public statusCode: number;
+  public message: string;
+  public error?: Error;
+  public validationErrors?: Result<ValidationError>;
 
-  constructor() {
+  constructor(statusCode: number, message: string, error?: Error, validationErrors?: Result<ValidationError>) {
     super();
+
+    this.statusCode = statusCode;
+    this.message = message;
+    this.error = error;
+    this.validationErrors = validationErrors;
   }
 }
 
-export class CustomError extends Error {
-  constructor(public statusCode: number, public message: string, public validationErrors?: Result<ValidationError>) {
-    super();
+export class GenericServerError extends CustomError {
+  constructor(error: Error) {
+    super(500, 'Server Error', error);
   }
 }

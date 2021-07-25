@@ -17,6 +17,7 @@ class UserRouter {
 
   private _initializeRoutes() {
     this._router.post('/create', validatorMiddleware('createUser'), this._controller.createNewUser);
+    this._router.put('/:userId', validatorMiddleware('updateUser'), this._controller.updateUser);
   }
 }
 

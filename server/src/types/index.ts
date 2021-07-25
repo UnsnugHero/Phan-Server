@@ -15,7 +15,8 @@ export type ValidatorType =
   | 'updateRequest'
 
   // User Validations
-  | 'createUser';
+  | 'createUser'
+  | 'updateUser';
 
 /*************************************
  * INTERFACES
@@ -26,6 +27,7 @@ export interface ErrorResponse {
   status: string;
   statusCode: number;
   message: string;
+  error?: Error;
   validationErrors?: Result<ValidationError>;
 }
 

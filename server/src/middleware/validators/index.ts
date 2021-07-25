@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
 import { loginValidators } from './auth.validators';
-import { createUserValidators } from './users.validators';
+import { createUserValidators, updateUserValidators } from './users.validators';
 import { createRequestValidators, updateRequestValidators } from './request.validators';
 
 import { ValidatorType } from '../../types/index';
@@ -24,6 +24,8 @@ const validatorMap = (validatorType?: ValidatorType) => {
     // User Validation
     case 'createUser':
       return createUserValidators;
+    case 'updateUser':
+      return updateUserValidators;
     default:
       return [];
   }
@@ -35,7 +37,7 @@ export const validatorMiddleware = (validatorType?: ValidatorType) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      throw new CustomError(400, 'Error validating request', errors);
+      throw new CustomError(400, 'Error validating request', undefined, errors);
     }
 
     next();

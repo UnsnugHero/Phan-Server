@@ -10,7 +10,6 @@ const checkDuplicateRequestSubject = async (subject: string) => {
 };
 
 export const createRequestValidators = [
-  check(['subject', 'description', 'location'], 'Field is required').exists(),
   check(['subject', 'description', 'location'], 'Field cannot be empty').notEmpty(),
   check('subject', 'A Request with this subject already exists').custom((subject) =>
     checkDuplicateRequestSubject(subject)
@@ -20,6 +19,5 @@ export const createRequestValidators = [
 // Update Request Validators
 
 export const updateRequestValidators = [
-  check(['subject', 'description', 'location'], 'Field is required').exists(),
   check(['subject', 'description', 'location'], 'Field cannot be empty').notEmpty()
 ];
