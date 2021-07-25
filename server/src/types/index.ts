@@ -10,6 +10,10 @@ export type ValidatorType =
   // Auth Validations
   | 'login'
 
+  // Request Validations
+  | 'createRequest'
+  | 'updateRequest'
+
   // User Validations
   | 'createUser';
 

@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
-import { loginValidators } from '../validators/auth.validators';
-import { createUserValidators } from '../validators/users.validators';
+import { loginValidators } from './auth.validators';
+import { createUserValidators } from './users.validators';
+import { createRequestValidators, updateRequestValidators } from './request.validators';
+
 import { ValidatorType } from '../../types/index';
 import { CustomError } from '../../util/helpers';
 
@@ -14,6 +16,11 @@ const validatorMap = (validatorType?: ValidatorType) => {
     // Auth Validation
     case 'login':
       return loginValidators;
+    // Request Validation
+    case 'createRequest':
+      return createRequestValidators;
+    case 'updateRequest':
+      return updateRequestValidators;
     // User Validation
     case 'createUser':
       return createUserValidators;
