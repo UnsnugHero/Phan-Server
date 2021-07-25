@@ -6,6 +6,10 @@ import { User } from '../models/User';
 import { CustomError, GenericServerError } from '../util/helpers';
 
 class UserController {
+  /*************************************
+   * User CRUD
+   *************************************/
+
   public async getUser(req: Request, res: Response, next: NextFunction) {
     const userId: string = req.params.userId;
 
@@ -63,7 +67,24 @@ class UserController {
     }
   }
 
-  public async deleteUser(req: Request, res: Response, next: NextFunction) {}
+  public async deleteUser(req: Request, res: Response, next: NextFunction) {
+    const userId: string = req.params.userId;
+
+    try {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: 'User successfully deleted' });
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'User not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
+
+  /*************************************
+   * User Liked Comments/Request CRUD
+   *************************************/
 }
 
 export = new UserController();
