@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { CustomError, GenericServerError } from '../util/helpers';
 
 import { Request as PhanRequest } from '../util/database/models/Request';
-import { IPhanRequest } from '../models/index';
+import { IPhanRequest, RequestSearchQuery } from '../models/index';
 
 class RequestController {
   /*************************************
@@ -79,7 +79,28 @@ class RequestController {
     }
   }
 
-  public async searchRequests(req: Request, res: Response, next: NextFunction) {}
+  public async searchRequests(req: Request, res: Response, next: NextFunction) {
+    const { subject, sortOn } = req.body;
+    const sortDir = req.body.sortDir || 'desc';
+    const pageSize = req.body.pageSize || 25;
+    const page = req.body.page || 1;
+
+    const query: RequestSearchQuery = {};
+    if (subject !== '') {
+      query['subject'] = subject;
+    }
+
+    try {
+      const results = await PhanRequest.find(query)
+        .sort({ [sortOn]: sortDir })
+        .skip(pageSize * (page - 1))
+        .limit(pageSize);
+      res.status(200).json({ results });
+    } catch (error) {
+      console.log(error);
+      next(new GenericServerError(error));
+    }
+  }
 
   /*************************************
    * Request Comments CRUD

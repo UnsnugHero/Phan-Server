@@ -17,6 +17,9 @@ export const createRequestValidators = [
   )
 ];
 
+// Searh Request Validators
+export const searchRequestValidators = [check('subject', 'This field must exist').exists()];
+
 // Update Request Validators & Helpers
 
 // want to check that subject is not a duplicate only if the matching request found is not the one being updated

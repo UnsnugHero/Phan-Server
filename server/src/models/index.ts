@@ -12,11 +12,16 @@ export type ValidatorType =
 
   // Request Validations
   | 'createRequest'
+  | 'searchRequest'
   | 'updateRequest'
 
   // User Validations
   | 'createUser'
   | 'updateUser';
+
+export type SortDir = 'asc' | 'desc';
+
+export type RequestSortOn = 'postedDate';
 
 /*************************************
  * INTERFACES
@@ -33,6 +38,14 @@ export interface ErrorResponse {
 
 // Requests
 export interface RequestComment {}
+
+export interface RequestSearchQuery {
+  subject?: string;
+  sortOn?: RequestSortOn;
+  sortDir?: SortDir;
+  pageSize?: number;
+  page?: number;
+}
 
 export interface IPhanRequest {
   user: string | ObjectId;

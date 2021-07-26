@@ -19,7 +19,7 @@ class RequestRouter {
   private _initializeRoutes() {
     this._router.get('/:requestId', this._controller.getRequest);
     this._router.post('/create', [authToken, ...validatorMiddleware('createRequest')], this._controller.createRequest);
-    this._router.post('/search', this._controller.searchRequests);
+    this._router.post('/search', validatorMiddleware('searchRequest'), this._controller.searchRequests);
     this._router.put(
       '/:requestId',
       [authToken, ...validatorMiddleware('updateRequest')],

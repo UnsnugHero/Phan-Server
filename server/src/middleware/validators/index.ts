@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 
 import { loginValidators } from './auth.validators';
 import { createUserValidators, updateUserValidators } from './users.validators';
-import { createRequestValidators, updateRequestValidators } from './request.validators';
+import { createRequestValidators, searchRequestValidators, updateRequestValidators } from './request.validators';
 
 import { ValidatorType } from '../../models/index';
 import { CustomError } from '../../util/helpers';
@@ -16,11 +16,15 @@ const validatorMap = (validatorType?: ValidatorType) => {
     // Auth Validation
     case 'login':
       return loginValidators;
+
     // Request Validation
     case 'createRequest':
       return createRequestValidators;
+    case 'searchRequest':
+      return searchRequestValidators;
     case 'updateRequest':
       return updateRequestValidators;
+
     // User Validation
     case 'createUser':
       return createUserValidators;
