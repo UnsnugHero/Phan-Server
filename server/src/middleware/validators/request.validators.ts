@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { check } from 'express-validator';
 
-import { Request as PhanRequest } from '../../models/Request';
+import { Request as PhanRequest } from '../../util/database/models/Request';
 
 // Create Request Validators & Helpers
 

@@ -5,7 +5,7 @@ import { loginValidators } from './auth.validators';
 import { createUserValidators, updateUserValidators } from './users.validators';
 import { createRequestValidators, updateRequestValidators } from './request.validators';
 
-import { ValidatorType } from '../../types/index';
+import { ValidatorType } from '../../models/index';
 import { CustomError } from '../../util/helpers';
 
 /**

@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 
 import { CustomError, GenericServerError } from '../util/helpers';
 
-import { Request as PhanRequest } from '../models/Request';
-import { IPhanRequest } from '../types/index';
+import { Request as PhanRequest } from '../util/database/models/Request';
+import { IPhanRequest } from '../models/index';
 
 class RequestController {
   /*************************************

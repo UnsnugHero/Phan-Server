@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { sign } from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 
-import { User } from '../models/User';
+import { User } from '../util/database/models/User';
 
 class AuthController {
   public async login(req: Request, res: Response, next: NextFunction) {

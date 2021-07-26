@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-import { User } from '../../models/User';
+import { User } from '../../util/database/models/User';
 
 // Create User Validators & Helpers
 

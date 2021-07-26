@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { hash } from 'bcrypt';
 import { omit } from 'lodash';
 
-import { User } from '../models/User';
+import { User } from '../util/database/models/User';
 import { CustomError, GenericServerError } from '../util/helpers';
 
 class UserController {
