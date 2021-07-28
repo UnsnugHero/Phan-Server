@@ -3,7 +3,10 @@ import { hash } from 'bcrypt';
 import { omit } from 'lodash';
 
 import { User } from '../util/database/models/User';
+import { Request as PhanRequest } from '../util/database/models/Request';
 import { CustomError, GenericServerError } from '../util/helpers';
+import { IUser } from '../models/user';
+import { IPhanRequest } from '../models';
 
 class UserController {
   /*************************************
@@ -83,8 +86,40 @@ class UserController {
   }
 
   /*************************************
-   * User Liked Comments/Request CRUD
+   * User Liked Request CRUD
    *************************************/
+
+  public async likeRequest(req: Request, res: Response, next: NextFunction) {
+    const requestId = req.params.requestId;
+    const userId = req.user?.id;
+
+    try {
+      const request: IPhanRequest = await PhanRequest.findById(requestId);
+      const user: IUser = await User.findById(userId);
+
+      if (!request) {
+        return res.status(404).json({ message: 'Request not found' });
+      }
+
+      // check if user has already liked this request
+      const likedRequest = user.likedRequests.find((request) => request.toString() === requestId);
+      if (likedRequest) {
+        res.status(400).json({ message: 'This request has already been liked' });
+      }
+
+      const newLikedRequests = [...user.likedRequests, requestId];
+      user.likedRequests = newLikedRequests;
+
+      // might this cause race conditions?
+      request.likes = request.likes + 1;
+
+      await user.save();
+      await request.save();
+    } catch (error) {
+      console.error(error);
+      next(new GenericServerError(error));
+    }
+  }
 }
 
 export = new UserController();
