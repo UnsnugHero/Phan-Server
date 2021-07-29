@@ -19,11 +19,17 @@ const requestSchema = new Schema({
     type: String,
     required: true
   },
-  likes: {
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'users'
+  likes: [
+    {
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }
     }
+  ],
+  likesCount: {
+    type: Number,
+    default: 0
   },
   postedDate: {
     type: Date,

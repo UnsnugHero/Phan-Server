@@ -24,7 +24,7 @@ class MainRouter {
    */
   private _initializeRoutes() {
     this._router.use('/auth', this._authRouter);
-    this._router.use('/request', this._requestRouter);
+    this._router.use('/requests', this._requestRouter);
     this._router.use('/users', this._userRouter);
   }
 }
