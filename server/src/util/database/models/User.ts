@@ -16,8 +16,7 @@ const userSchema = new Schema({
   dateCreated: {
     type: Date,
     default: Date.now
-  },
-  likedRequests: [Schema.Types.ObjectId]
+  }
 });
 
 export const User = model('User', userSchema);

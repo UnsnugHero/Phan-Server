@@ -3,16 +3,9 @@ import { hash } from 'bcrypt';
 import { omit } from 'lodash';
 
 import { User } from '../util/database/models/User';
-import { Request as PhanRequest } from '../util/database/models/Request';
 import { CustomError, GenericServerError } from '../util/helpers';
-import { IUser } from '../models/user';
-import { IPhanRequest } from '../models';
 
 class UserController {
-  /*************************************
-   * User CRUD
-   *************************************/
-
   public async getUser(req: Request, res: Response, next: NextFunction) {
     const userId: string = req.params.userId;
 

@@ -1,9 +1,13 @@
 import { Schema, model } from 'mongoose';
 
 export const requestCommentSchema = new Schema({
-  user: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: 'User'
+  },
+  requestId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Request'
   },
   text: {
     type: String,
@@ -16,8 +20,7 @@ export const requestCommentSchema = new Schema({
   edited: {
     type: Boolean,
     default: false
-  },
-  likes: Number
+  }
 });
 
 export const generalPollCommentSchema = new Schema({
