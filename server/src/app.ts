@@ -3,8 +3,8 @@ import express, { json } from 'express';
 import * as dotenv from 'dotenv';
 
 import { connectDB } from './util/database/config';
-import MainRouter from './routers/main.router';
 import { errorHandler } from './middleware';
+import MainRouter from './routers/main.router';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 

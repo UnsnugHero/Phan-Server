@@ -22,9 +22,7 @@ class AuthController {
 
       // only id is necessary for token
       const payload = {
-        user: {
-          id: user.id
-        }
+        userId: user.id
       };
 
       const accessToken = sign(payload, process.env.SECRET_KEY as string, { expiresIn: '24d' });

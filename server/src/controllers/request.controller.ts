@@ -34,7 +34,7 @@ class RequestController {
     const { ...requestFields } = req.body;
 
     // construct request
-    const userId = req.user?.id;
+    const userId = req.userId;
     const request: IPhanRequest = { ...requestFields, user: userId };
 
     // attempt creating new document
@@ -97,14 +97,54 @@ class RequestController {
         .limit(pageSize);
       res.status(200).json({ results });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       next(new GenericServerError(error));
     }
   }
 
   /*************************************
-   * Request Comments CRUD
+   * Request Likes CRUD
    *************************************/
+
+  public async likeRequest(req: Request, res: Response, next: NextFunction) {
+    const requestId = req.params.requestId;
+
+    try {
+      const request = await PhanRequest.findById(requestId);
+
+      const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, {
+        $inc: { likesCount: 1 },
+        $addToSet: { likes: req.userId }
+      });
+
+      res.status(200).json({ request: updatedRequest });
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'Request not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
+
+  public async unlikeRequest(req: Request, res: Response, next: NextFunction) {
+    const requestId = req.params.requestId;
+
+    try {
+      const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, {
+        $inc: { likesCount: -1 },
+        $pull: { likes: req.userId }
+      });
+
+      res.status(200).json({ message: 'Request successfully liked', request: updatedRequest });
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'Request not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
 }
 
 export = new RequestController();

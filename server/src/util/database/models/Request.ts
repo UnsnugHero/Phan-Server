@@ -1,7 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-import { requestCommentSchema } from './Comment';
-
 const requestSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -19,14 +17,7 @@ const requestSchema = new Schema({
     type: String,
     required: true
   },
-  likes: [
-    {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-      }
-    }
-  ],
+  likes: [Schema.Types.ObjectId],
   likesCount: {
     type: Number,
     default: 0

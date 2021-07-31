@@ -1,6 +1,6 @@
 // This file could potentially get large but this project won't get that big so it probably isn't an issue
 import { Result, ValidationError } from 'express-validator';
-import { ObjectId, Document } from 'mongoose';
+import { Types, Document } from 'mongoose';
 
 /*************************************
  * TYPES
@@ -48,7 +48,7 @@ export interface RequestSearchQuery {
 }
 
 export interface IPhanRequest extends Document {
-  user: string | ObjectId;
+  user: Types.ObjectId;
   subject: string;
   description: string;
   location: string;

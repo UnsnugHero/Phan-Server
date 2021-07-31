@@ -25,6 +25,8 @@ class RequestRouter {
       [authToken, ...validatorMiddleware('updateRequest')],
       this._controller.updateRequest
     );
+    this._router.put('/like/:requestId', authToken, this._controller.likeRequest);
+    this._router.put('/unlike/:requestId', authToken, this._controller.unlikeRequest);
     this._router.delete('/:requestId', authToken, this._controller.deleteRequest);
   }
 }

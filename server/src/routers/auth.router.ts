@@ -1,7 +1,6 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
 
 import AuthController from '../controllers/auth.controller';
-import { authToken } from '../middleware/index';
 import { validatorMiddleware } from '../middleware/validators/index';
 
 class AuthRouter {

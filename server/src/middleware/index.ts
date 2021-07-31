@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { JwtPayload, verify } from 'jsonwebtoken';
+import { Types } from 'mongoose';
 
 import { ErrorResponse } from '../models';
 import { CustomError } from '../util/helpers';
@@ -12,7 +13,7 @@ export const authToken = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const verified = verify(authHeader, process.env.SECRET_KEY as string) as JwtPayload;
-    req.user = verified.user;
+    req.userId = Types.ObjectId(verified.userId);
     next();
   } catch (error) {
     throw new CustomError(401, 'Token invalid');
