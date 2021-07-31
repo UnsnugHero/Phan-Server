@@ -1,6 +1,4 @@
-// This file could potentially get large but this project won't get that big so it probably isn't an issue
 import { Result, ValidationError } from 'express-validator';
-import { Types, Document } from 'mongoose';
 
 /*************************************
  * TYPES
@@ -21,8 +19,6 @@ export type ValidatorType =
 
 export type SortDir = 'asc' | 'desc';
 
-export type RequestSortOn = 'postedDate';
-
 /*************************************
  * INTERFACES
  *************************************/
@@ -34,28 +30,4 @@ export interface ErrorResponse {
   message: string;
   error?: Error;
   validationErrors?: Result<ValidationError>;
-}
-
-// Requests
-export interface RequestComment {}
-
-export interface RequestSearchQuery {
-  subject?: string;
-  sortOn?: RequestSortOn;
-  sortDir?: SortDir;
-  pageSize?: number;
-  page?: number;
-}
-
-export interface IPhanRequest extends Document {
-  user: Types.ObjectId;
-  subject: string;
-  description: string;
-  location: string;
-  likes: number;
-  comments: RequestComment[];
-  postedDate: Date;
-  updatedDate: Date;
-  edited: boolean;
-  completed: boolean;
 }

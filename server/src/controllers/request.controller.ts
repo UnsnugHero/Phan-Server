@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { CustomError, GenericServerError } from '../util/helpers';
 
 import { Request as PhanRequest } from '../util/database/models/Request';
-import { IPhanRequest, RequestSearchQuery } from '../models/index';
+import { IPhanRequest, RequestComment, RequestSearchQuery } from '../models/request';
 
 class RequestController {
   /*************************************
@@ -159,6 +159,45 @@ class RequestController {
       next(new GenericServerError(error));
     }
   }
+
+  /*************************************
+   * Request Comments CRUD
+   *************************************/
+
+  // comments are only shown on the frontend on a request page, so
+  // the GET request will have the comments needed
+
+  // TODO: needs validator, text is not empty
+  public async postComment(req: Request, res: Response, next: NextFunction) {
+    const { userId } = req;
+    const { requestId } = req.params;
+
+    try {
+      const { text } = req.body;
+
+      const newComment: RequestComment = {
+        userId: userId || '',
+        text,
+        edited: false
+      };
+
+      const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, {
+        $push: { comments: newComment }
+      });
+
+      return res.status(200).json({ message: 'Comment added', request: updatedRequest });
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'Request not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
+
+  public async updateComment(req: Request, res: Response, next: NextFunction) {}
+
+  public async deleteComment(req: Request, res: Response, next: NextFunction) {}
 }
 
 export = new RequestController();
