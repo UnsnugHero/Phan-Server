@@ -13,7 +13,7 @@ export const authToken = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const verified = verify(authHeader, process.env.SECRET_KEY as string) as JwtPayload;
-    req.userId = Types.ObjectId(verified.userId);
+    req.userId = verified.userId;
     next();
   } catch (error) {
     throw new CustomError(401, 'Token invalid');

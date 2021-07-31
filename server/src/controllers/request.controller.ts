@@ -107,17 +107,23 @@ class RequestController {
    *************************************/
 
   public async likeRequest(req: Request, res: Response, next: NextFunction) {
-    const requestId = req.params.requestId;
+    const { userId } = req;
+    const { requestId } = req.params;
 
     try {
-      const request = await PhanRequest.findById(requestId);
+      const updatedRequest = await PhanRequest.findOneAndUpdate(
+        { _id: requestId, likes: { $ne: userId } },
+        {
+          $addToSet: { likes: userId },
+          $inc: { likesCount: 1 }
+        }
+      );
 
-      const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, {
-        $inc: { likesCount: 1 },
-        $addToSet: { likes: req.userId }
-      });
+      if (!updatedRequest) {
+        return res.status(404).json({ message: 'Request has already been liked' });
+      }
 
-      res.status(200).json({ request: updatedRequest });
+      res.status(200).json({ message: 'Request successfully liked', request: updatedRequest });
     } catch (error) {
       console.error(error);
       if (error.kind === 'ObjectId') {
@@ -128,15 +134,23 @@ class RequestController {
   }
 
   public async unlikeRequest(req: Request, res: Response, next: NextFunction) {
-    const requestId = req.params.requestId;
+    const { userId } = req;
+    const { requestId } = req.params;
 
     try {
-      const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, {
-        $inc: { likesCount: -1 },
-        $pull: { likes: req.userId }
-      });
+      const updatedRequest = await PhanRequest.findOneAndUpdate(
+        { _id: requestId, likes: { $in: userId } },
+        {
+          $pull: { likes: userId },
+          $inc: { likesCount: -1 }
+        }
+      );
 
-      res.status(200).json({ message: 'Request successfully liked', request: updatedRequest });
+      if (!updatedRequest) {
+        return res.status(404).json({ message: 'Request has already been unliked' });
+      }
+
+      res.status(200).json({ message: 'Request successfully unliked', request: updatedRequest });
     } catch (error) {
       console.error(error);
       if (error.kind === 'ObjectId') {
