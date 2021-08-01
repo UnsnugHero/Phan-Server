@@ -1,21 +1,25 @@
 import { Result, ValidationError } from 'express-validator';
 
+export enum Validator {
+  // auth
+  LOGIN,
+
+  // request
+  CREATE_REQUEST,
+  SEARCH_REQUEST,
+  UPDATE_REQUEST,
+  POST_COMMENT,
+  UPDATE_COMMENT,
+  DELETE_COMMENT,
+
+  // user
+  CREATE_USER,
+  UPDATE_USER
+}
+
 /*************************************
  * TYPES
  *************************************/
-
-export type ValidatorType =
-  // Auth Validations
-  | 'login'
-
-  // Request Validations
-  | 'createRequest'
-  | 'searchRequest'
-  | 'updateRequest'
-
-  // User Validations
-  | 'createUser'
-  | 'updateUser';
 
 export type SortDir = 'asc' | 'desc';
 

@@ -3,39 +3,50 @@ import { validationResult } from 'express-validator';
 
 import { loginValidators } from './auth.validators';
 import { createUserValidators, updateUserValidators } from './users.validators';
-import { createRequestValidators, searchRequestValidators, updateRequestValidators } from './request.validators';
+import {
+  createRequestValidators,
+  postCommentValidators,
+  searchRequestValidators,
+  updateCommentValidators,
+  updateRequestValidators
+} from './request.validators';
 
-import { ValidatorType } from '../../models/general.model';
+import { Validator } from '../../models/general.model';
 import { CustomError } from '../../util/helpers';
 
 /**
  * Validator Map used to identify which middleware validators will be applied to the current route.
  */
-const validatorMap = (validatorType?: ValidatorType) => {
+const validatorMap = (validatorType?: Validator) => {
   switch (validatorType) {
     // Auth Validation
-    case 'login':
+    case Validator.LOGIN:
       return loginValidators;
 
     // Request Validation
-    case 'createRequest':
+    case Validator.CREATE_REQUEST:
       return createRequestValidators;
-    case 'searchRequest':
+    case Validator.SEARCH_REQUEST:
       return searchRequestValidators;
-    case 'updateRequest':
+    case Validator.UPDATE_REQUEST:
       return updateRequestValidators;
 
+    case Validator.POST_COMMENT:
+      return postCommentValidators;
+    case Validator.UPDATE_COMMENT:
+      return updateCommentValidators;
+
     // User Validation
-    case 'createUser':
+    case Validator.CREATE_USER:
       return createUserValidators;
-    case 'updateUser':
+    case Validator.UPDATE_USER:
       return updateUserValidators;
     default:
       return [];
   }
 };
 
-export const validatorMiddleware = (validatorType?: ValidatorType) => {
+export const validatorMiddleware = (validatorType?: Validator) => {
   const validationErrorHandler = (req: Request, res: Response, next: NextFunction) => {
     // check for validation errors
     const errors = validationResult(req);

@@ -35,3 +35,8 @@ export const updateRequestValidators = [
     checkDuplicateRequestSubjectUpdate(subject, req as Request)
   )
 ];
+
+// Post comment validators
+
+export const postCommentValidators = [check(['text'], 'Field is required').notEmpty()];
+export const updateCommentValidators = [check(['text'], 'Field is required').notEmpty()];
