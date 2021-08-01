@@ -1,10 +1,11 @@
 import { Types, Document } from 'mongoose';
 
-import { SortDir } from './general';
+import { SortDir } from './general.model';
 
 export type RequestSortOn = 'postedDate';
 
 export interface RequestComment {
+  id?: string | Types.ObjectId;
   userId: string | Types.ObjectId;
   text: string;
   postedDate?: Date;

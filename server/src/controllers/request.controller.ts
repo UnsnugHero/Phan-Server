@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { CustomError, GenericServerError } from '../util/helpers';
 
 import { Request as PhanRequest } from '../util/database/models/Request';
-import { IPhanRequest, RequestComment, RequestSearchQuery } from '../models/request';
+import { IPhanRequest, RequestComment, RequestSearchQuery } from '../models/request.model';
 
 class RequestController {
   /*************************************
@@ -195,7 +195,44 @@ class RequestController {
     }
   }
 
-  public async updateComment(req: Request, res: Response, next: NextFunction) {}
+  // TODO needs validator on text is not empty
+  public async updateComment(req: Request, res: Response, next: NextFunction) {
+    const { userId } = req;
+    const { requestId } = req.params;
+    const { commentId } = req.params;
+
+    try {
+      const { text } = req.body;
+
+      const updatedRequest = await PhanRequest.findOneAndUpdate(
+        {
+          _id: requestId,
+          comments: {
+            $elemMatch: {
+              _id: commentId,
+              userId
+            }
+          }
+        },
+        {
+          $set: { 'comments.$.text': text, 'comments.$.edited': true }
+        }
+      );
+
+      // either user can't update this comment or comment doesn't exist
+      if (!updatedRequest) {
+        return res.status(400).json({ message: 'Error updating request comment' });
+      }
+
+      return res.status(200).json({ message: 'Comment updated', request: updatedRequest });
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'Request not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
 
   public async deleteComment(req: Request, res: Response, next: NextFunction) {}
 }

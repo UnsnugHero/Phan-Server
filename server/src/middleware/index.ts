@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { JwtPayload, verify } from 'jsonwebtoken';
-import { Types } from 'mongoose';
 
-import { ErrorResponse } from '../models/general';
+import { ErrorResponse } from '../models/general.model';
 import { CustomError } from '../util/helpers';
 
 export const authToken = (req: Request, res: Response, next: NextFunction) => {
