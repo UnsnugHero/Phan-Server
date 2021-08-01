@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { authToken } from '../middleware';
 import commentController from '../controllers/comment.controller';
 
 class CommentRouter {
@@ -14,7 +15,9 @@ class CommentRouter {
     this._initializeRoutes();
   }
 
-  private _initializeRoutes() {}
+  private _initializeRoutes() {
+    this._router.post('/post', authToken, this._controller.postGeneralComment);
+  }
 }
 
 export = new CommentRouter().router;
