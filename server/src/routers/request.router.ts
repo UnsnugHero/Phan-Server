@@ -45,7 +45,7 @@ class RequestRouter {
       [authToken, ...validatorMiddleware(Validator.UPDATE_COMMENT)],
       this._controller.updateComment
     );
-    this._router.delete('/comment/:requestId/:commentId', [authToken], this._controller.deleteComment);
+    this._router.delete('/comment/:requestId/:commentId', authToken, this._controller.deleteComment);
   }
 }
 

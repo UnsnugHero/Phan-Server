@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import AuthController from '../controllers/auth.controller';
+import { Validator } from '../models/general.model';
 import { validatorMiddleware } from '../middleware/validators/index';
 
 class AuthRouter {
@@ -16,7 +17,7 @@ class AuthRouter {
   }
 
   private _initializeRoutes() {
-    this._router.post('/login', validatorMiddleware('login'), this._controller.login);
+    this._router.post('/login', validatorMiddleware(Validator.LOGIN), this._controller.login);
   }
 }
 

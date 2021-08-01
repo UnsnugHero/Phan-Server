@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import UserController from '../controllers/user.controller';
+import { Validator } from '../models/general.model';
 import { authToken } from '../middleware/index';
 import { validatorMiddleware } from '../middleware/validators/index';
 
@@ -18,8 +19,12 @@ class UserRouter {
 
   private _initializeRoutes() {
     this._router.get('/:userId', authToken, this._controller.getUser);
-    this._router.post('/create', validatorMiddleware('createUser'), this._controller.createNewUser);
-    this._router.put('/:userId', [authToken, ...validatorMiddleware('updateUser')], this._controller.updateUser);
+    this._router.post('/create', validatorMiddleware(Validator.CREATE_USER), this._controller.createNewUser);
+    this._router.put(
+      '/:userId',
+      [authToken, ...validatorMiddleware(Validator.UPDATE_USER)],
+      this._controller.updateUser
+    );
     this._router.delete('/:userId', authToken, this._controller.deleteUser);
   }
 }
