@@ -185,7 +185,7 @@ class RequestController {
         $push: { comments: newComment }
       });
 
-      return res.status(200).json({ message: 'Comment added', request: updatedRequest });
+      return res.status(200).json({ message: 'Comment added', updatedRequest });
     } catch (error) {
       console.error(error);
       if (error.kind === 'ObjectId') {
@@ -198,8 +198,7 @@ class RequestController {
   // TODO needs validator on text is not empty
   public async updateComment(req: Request, res: Response, next: NextFunction) {
     const { userId } = req;
-    const { requestId } = req.params;
-    const { commentId } = req.params;
+    const { requestId, commentId } = req.params;
 
     try {
       const { text } = req.body;
@@ -224,7 +223,7 @@ class RequestController {
         return res.status(400).json({ message: 'Error updating request comment' });
       }
 
-      return res.status(200).json({ message: 'Comment updated', request: updatedRequest });
+      return res.status(200).json({ message: 'Comment updated', updatedRequest });
     } catch (error) {
       console.error(error);
       if (error.kind === 'ObjectId') {
@@ -234,7 +233,37 @@ class RequestController {
     }
   }
 
-  public async deleteComment(req: Request, res: Response, next: NextFunction) {}
+  public async deleteComment(req: Request, res: Response, next: NextFunction) {
+    const { userId } = req;
+    const { requestId, commentId } = req.params;
+
+    try {
+      const updatedRequest = await PhanRequest.findOneAndUpdate(
+        {
+          _id: requestId,
+          comments: {
+            $elemMatch: {
+              _id: commentId,
+              userId
+            }
+          }
+        },
+        { $pull: { comments: { _id: commentId } } }
+      );
+
+      if (!updatedRequest) {
+        return res.status(400).json({ message: 'Error deleting request' });
+      }
+
+      return res.status(200).json({ message: 'Comment deleted', updatedRequest });
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'Request not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
 }
 
 export = new RequestController();
