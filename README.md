@@ -1,3 +1,3 @@
-# Phantom Aficionado Website
+# Phantom Aficionado Server
 
-For real??
+Server for the Phantom Aficionado Client
