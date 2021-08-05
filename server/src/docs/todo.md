@@ -2,4 +2,6 @@
 
 - sanitization?
 
-- convert user id to objectId in middleware
+# Model stuff
+
+- add unique and trim modifier where necessary

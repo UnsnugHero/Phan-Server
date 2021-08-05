@@ -1,23 +1,26 @@
 import { Schema, model } from 'mongoose';
 
-const requestCommentSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
+const requestCommentSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    text: {
+      type: String,
+      required: true
+    },
+    postedDate: {
+      type: Date,
+      default: Date.now
+    },
+    edited: {
+      type: Boolean,
+      default: false
+    }
   },
-  text: {
-    type: String,
-    required: true
-  },
-  postedDate: {
-    type: Date,
-    default: Date.now
-  },
-  edited: {
-    type: Boolean,
-    default: false
-  }
-});
+  { timestamps: true }
+);
 
 const requestSchema = new Schema({
   user: {

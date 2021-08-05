@@ -15,10 +15,10 @@ class CommentController {
   //   } catch (error) {}
   // }
 
-  public postGeneralComment(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req;
-
+  public async postGeneralComment(req: Request, res: Response, next: NextFunction) {
     try {
+      const newGeneralComment = await GeneralComment.create(req.body);
+      return res.status(200).json(newGeneralComment);
     } catch (error) {
       console.error(error);
       next(new GenericServerError(error));
