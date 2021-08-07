@@ -17,7 +17,6 @@ class MainRouter {
   }
 
   constructor() {
-    this._router = Router();
     this._initializeRoutes();
   }
 

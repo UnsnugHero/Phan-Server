@@ -1,5 +1,7 @@
 import path from 'path';
 import express, { json } from 'express';
+import { createServer } from 'http';
+import { Server, Socket } from 'socket.io';
 import * as dotenv from 'dotenv';
 
 import { connectDB } from './util/database/config';
@@ -8,8 +10,15 @@ import MainRouter from './routers/main.router';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-class Server {
+class PhanServer {
   public app = express();
+  public server = createServer(this.app);
+  public io = new Server(this.server, {
+    cors: {
+      origin: 'http://localhost:3000',
+      methods: ['GET', 'POST']
+    }
+  });
   public router = MainRouter;
 
   constructor() {
@@ -18,17 +27,22 @@ class Server {
 }
 
 // initialize server
-const server = new Server();
+const phanServer = new PhanServer();
 
 // attach middlewares
-server.app.use(json());
+phanServer.app.use(json());
+
+// websocket
+phanServer.io.on('connection', (socket: Socket) => {
+  console.log('New WS Connection...');
+});
 
 // append api/ before all routes
-server.app.use('/api', server.router);
+phanServer.app.use('/api', phanServer.router);
 
 // error handler middleware - this must be after routes
-server.app.use(errorHandler);
+phanServer.app.use(errorHandler);
 
 // listen on port
 const port = process.env.PORT || 5000;
-server.app.listen(port, () => console.log(`Listening on port ${port}`));
+phanServer.server.listen(port, () => console.log(`Listening on port ${port}`));
