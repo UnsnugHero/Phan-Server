@@ -1,11 +1,7 @@
 import { Schema, model } from 'mongoose';
 
-export const generalPollCommentSchema = new Schema(
+export const generalCommentSchema = new Schema(
   {
-    username: {
-      type: String,
-      default: 'Anon'
-    },
     text: {
       type: String,
       required: true
@@ -14,4 +10,4 @@ export const generalPollCommentSchema = new Schema(
   { timestamps: true }
 );
 
-export const GeneralComment = model('GeneralComment', generalPollCommentSchema);
+export const GeneralComment = model('GeneralComment', generalCommentSchema);
