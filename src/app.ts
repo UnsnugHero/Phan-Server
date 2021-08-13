@@ -35,7 +35,7 @@ phanServer.app.use(json());
 // websocket
 phanServer.io.on('connection', (socket: Socket) => {
   socket.on('postComment', (comment) => {
-    socket.emit('newComment', comment);
+    phanServer.io.emit('newComment', comment);
   });
 });
 
