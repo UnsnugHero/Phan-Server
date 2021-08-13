@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { authToken } from '../middleware/index';
 import PollController from '../controllers/poll.controller';
 
 class PollRouter {
@@ -15,8 +16,8 @@ class PollRouter {
   }
 
   private _initializeRoutes() {
-    // probably want a auth AND admin authenticator middleware here
     this._router.get('/', this._controller.getCurrentPoll);
+    this._router.post('/create', [authToken], this._controller.createNewPoll);
   }
 }
 
