@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { Poll } from '../util/database/models/Poll';
-import { GenericServerError } from '../util/helpers';
+import { CustomError, GenericServerError } from '../util/helpers';
 
 class PollController {
   // only one poll should be active at any given time
@@ -43,7 +43,24 @@ class PollController {
     }
   }
 
-  public async archivePoll(req: Request, res: Response, next: NextFunction) {}
+  public async archivePoll(req: Request, res: Response, next: NextFunction) {
+    const pollId: string = req.params.pollId;
+
+    try {
+      const updatedPoll = await Poll.findByIdAndUpdate(pollId, { active: false });
+
+      return res.status(200).json({
+        message: 'Poll successfully archived',
+        poll: updatedPoll
+      });
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'Poll not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
 
   public async voteYesPoll(req: Request, res: Response, next: NextFunction) {}
 

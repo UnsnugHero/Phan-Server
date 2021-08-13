@@ -18,6 +18,7 @@ class PollRouter {
   private _initializeRoutes() {
     this._router.get('/', this._controller.getCurrentPoll);
     this._router.post('/create', [authToken], this._controller.createNewPoll);
+    this._router.put('/archive/:pollId', [authToken], this._controller.archivePoll);
   }
 }
 

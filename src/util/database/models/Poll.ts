@@ -21,7 +21,8 @@ export const pollSchema = new Schema(
       type: Boolean,
       required: true
     },
-    votes: [voteSchema]
+    yesVotes: [voteSchema],
+    noVotes: [voteSchema]
   },
   { timestamps: true }
 );
