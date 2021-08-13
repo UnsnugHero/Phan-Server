@@ -34,7 +34,9 @@ phanServer.app.use(json());
 
 // websocket
 phanServer.io.on('connection', (socket: Socket) => {
-  console.log('New WS Connection...');
+  socket.on('postComment', (comment) => {
+    socket.emit('newComment', comment);
+  });
 });
 
 // append api/ before all routes

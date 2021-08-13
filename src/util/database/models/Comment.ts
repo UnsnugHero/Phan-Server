@@ -2,9 +2,13 @@ import { Schema, model } from 'mongoose';
 
 export const generalCommentSchema = new Schema(
   {
-    text: {
+    content: {
       type: String,
       required: true
+    },
+    author: {
+      type: String,
+      default: 'Anon'
     }
   },
   { timestamps: true }
