@@ -1,16 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-export const voteSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  answer: {
-    type: Boolean,
-    required: true
-  }
-});
-
 export const pollSchema = new Schema(
   {
     title: {
@@ -21,8 +10,8 @@ export const pollSchema = new Schema(
       type: Boolean,
       required: true
     },
-    yesVotes: [voteSchema],
-    noVotes: [voteSchema]
+    yesVotes: [Schema.Types.ObjectId],
+    noVotes: [Schema.Types.ObjectId]
   },
   { timestamps: true }
 );

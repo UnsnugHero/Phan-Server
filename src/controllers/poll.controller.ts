@@ -62,9 +62,43 @@ class PollController {
     }
   }
 
-  public async voteYesPoll(req: Request, res: Response, next: NextFunction) {}
+  public async voteYesPoll(req: Request, res: Response, next: NextFunction) {
+    await this._votePoll(req, res, next, true);
+  }
 
-  public async voteNoPoll(req: Request, res: Response, next: NextFunction) {}
+  public async voteNoPoll(req: Request, res: Response, next: NextFunction) {
+    await this._votePoll(req, res, next, false);
+  }
+
+  private async _votePoll(req: Request, res: Response, next: NextFunction, vote: boolean) {
+    const addVoteField = vote ? 'yesVotes' : 'noVotes';
+    const pullVoteField = vote ? 'noVotes' : 'yesVotes';
+
+    const { userId } = req;
+    const { pollId } = req.params;
+
+    try {
+      const updatedPoll = await Poll.findOneAndUpdate(
+        { _id: pollId, [addVoteField]: { $ne: userId } },
+        {
+          $addToSet: { [addVoteField]: userId },
+          $pull: { [pullVoteField]: userId }
+        }
+      );
+
+      if (!updatedPoll) {
+        return res.status(404).json({ message: 'You have already votes yes to this poll' });
+      }
+
+      res.status(200).json({ message: 'Successfully voted yes to poll', poll: updatedPoll });
+    } catch (error) {
+      console.error(error);
+      if (error.kind === 'ObjectId') {
+        next(new CustomError(404, 'Poll not found'));
+      }
+      next(new GenericServerError(error));
+    }
+  }
 }
 
 export = new PollController();
