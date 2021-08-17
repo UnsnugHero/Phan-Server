@@ -4,6 +4,11 @@ import { Poll } from '../util/database/models/Poll';
 import { CustomError, GenericServerError } from '../util/helpers';
 
 class PollController {
+  constructor() {
+    this.voteYesPoll = this.voteYesPoll.bind(this);
+    this.voteNoPoll = this.voteNoPoll.bind(this);
+  }
+
   // only one poll should be active at any given time
   public async getCurrentPoll(req: Request, res: Response, next: NextFunction) {
     try {
@@ -12,7 +17,7 @@ class PollController {
       const responseMessage = activePoll ? 'Current poll successfully retrieved' : 'No poll currently active';
 
       res.status(200).json({
-        message: 'Current poll successfully retrieved',
+        message: responseMessage,
         poll: activePoll
       });
     } catch (error) {
@@ -73,6 +78,7 @@ class PollController {
   private async _votePoll(req: Request, res: Response, next: NextFunction, vote: boolean) {
     const addVoteField = vote ? 'yesVotes' : 'noVotes';
     const pullVoteField = vote ? 'noVotes' : 'yesVotes';
+    const voteType = vote ? 'yes' : 'no';
 
     const { userId } = req;
     const { pollId } = req.params;
@@ -87,10 +93,10 @@ class PollController {
       );
 
       if (!updatedPoll) {
-        return res.status(404).json({ message: 'You have already votes yes to this poll' });
+        return res.status(400).json({ message: `You have already voted ${voteType} to this poll` });
       }
 
-      res.status(200).json({ message: 'Successfully voted yes to poll', poll: updatedPoll });
+      res.status(200).json({ message: `Successfully voted ${voteType} to poll`, poll: updatedPoll });
     } catch (error) {
       console.error(error);
       if (error.kind === 'ObjectId') {
