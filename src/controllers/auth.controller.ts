@@ -20,13 +20,13 @@ class AuthController {
         return res.status(400).json({ message: 'Invalid Credentials' });
       }
 
-      // only id is necessary for token
       const payload = {
+        role: user.role,
         userId: user.id
       };
 
       const accessToken = sign(payload, process.env.SECRET_KEY as string, { expiresIn: '24d' });
-      res.status(200).json({ accessToken });
+      res.status(200).json({ message: 'Successfully logged in', accessToken });
     } catch (error) {
       next(error);
     }

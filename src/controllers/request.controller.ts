@@ -34,7 +34,7 @@ class RequestController {
     const { ...requestFields } = req.body;
 
     // construct request
-    const userId = req.userId;
+    const userId = req.user?.id;
     const request: IPhanRequest = { ...requestFields, user: userId };
 
     // attempt creating new document
@@ -107,7 +107,7 @@ class RequestController {
    *************************************/
 
   public async likeRequest(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req;
+    const userId = req.user?.id;
     const { requestId } = req.params;
 
     try {
@@ -134,7 +134,7 @@ class RequestController {
   }
 
   public async unlikeRequest(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req;
+    const userId = req.user?.id;
     const { requestId } = req.params;
 
     try {
@@ -169,7 +169,7 @@ class RequestController {
 
   // TODO: needs validator, text is not empty
   public async postComment(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req;
+    const userId = req.user?.id;
     const { requestId } = req.params;
 
     try {
@@ -197,7 +197,7 @@ class RequestController {
 
   // TODO needs validator on text is not empty
   public async updateComment(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req;
+    const userId = req.user?.id;
     const { requestId, commentId } = req.params;
 
     try {
@@ -234,7 +234,7 @@ class RequestController {
   }
 
   public async deleteComment(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req;
+    const userId = req.user?.id;
     const { requestId, commentId } = req.params;
 
     try {

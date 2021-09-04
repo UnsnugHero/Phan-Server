@@ -2,8 +2,14 @@ import { NextFunction, Request, Response } from 'express';
 import { JwtPayload, verify } from 'jsonwebtoken';
 
 import { ErrorResponse } from '../models/general.model';
-import { CustomError } from '../util/helpers';
+import { CustomError, ROLES } from '../util/helpers';
 
+/**
+ * Authorizes the request on the JWT that may or may not be attached to the request
+ * @param req
+ * @param res
+ * @param next
+ */
 export const authToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['x-auth-token'] as string;
   if (!authHeader) {
@@ -12,11 +18,35 @@ export const authToken = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const verified = verify(authHeader, process.env.SECRET_KEY as string) as JwtPayload;
-    req.userId = verified.userId;
+    req.user = {
+      role: verified.role,
+      id: verified.userId
+    };
+
     next();
   } catch (error) {
     throw new CustomError(401, 'Token invalid');
   }
+};
+
+/**
+ * Authorizes the request based on if the user is an admin
+ * @param req
+ * @param res
+ * @param next
+ */
+export const authRole = (req: Request, res: Response, next: NextFunction) => {
+  const role = req.user?.role;
+
+  if (!role) {
+    throw new CustomError(401, 'No user role, not authorized');
+  }
+
+  if (role !== ROLES.ADMIN) {
+    throw new CustomError(401, 'User not administration, not authorized');
+  }
+
+  next();
 };
 
 /**

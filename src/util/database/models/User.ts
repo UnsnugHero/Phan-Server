@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { ROLES } from '../../helpers';
 
 const userSchema = new Schema(
   {
@@ -13,6 +14,11 @@ const userSchema = new Schema(
     isAnonymous: {
       type: Boolean,
       default: true
+    },
+    role: {
+      type: String,
+      enum: [ROLES.USER, ROLES.ADMIN],
+      default: 'user'
     }
   },
   { timestamps: true }

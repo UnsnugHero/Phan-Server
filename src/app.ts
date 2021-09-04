@@ -8,6 +8,8 @@ import { connectDB } from './util/database/config';
 import { errorHandler } from './middleware';
 import MainRouter from './routers/main.router';
 
+const chalk = require('chalk');
+
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 class PhanServer {
@@ -47,4 +49,4 @@ phanServer.app.use(errorHandler);
 
 // listen on port
 const port = process.env.PORT || 5000;
-phanServer.server.listen(port, () => console.log(`Listening on port ${port}`));
+phanServer.server.listen(port, () => console.log(chalk.green(`Listening on port ${port}\n`)));

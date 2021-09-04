@@ -1,5 +1,10 @@
 import { Result, ValidationError } from 'express-validator';
 
+export enum ROLES {
+  ADMIN = 'admin',
+  USER = 'user'
+}
+
 export class CustomError extends Error {
   public statusCode: number;
   public message: string;

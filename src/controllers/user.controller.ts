@@ -28,13 +28,14 @@ class UserController {
 
   public async createNewUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const { username, password, isAnonymous } = req.body;
+      const { username, password, isAnonymous, role } = req.body;
       const encryptedPassword = await hash(password, 10);
 
       const newUser = await User.create({
         username,
         password: encryptedPassword,
-        isAnonymous
+        isAnonymous,
+        role
       });
 
       // get the JS object from the returned schema object and omit the password

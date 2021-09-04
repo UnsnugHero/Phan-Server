@@ -80,7 +80,7 @@ class PollController {
     const pullVoteField = vote ? 'noVotes' : 'yesVotes';
     const voteType = vote ? 'yes' : 'no';
 
-    const { userId } = req;
+    const userId = req.user?.id;
     const { pollId } = req.params;
 
     try {
