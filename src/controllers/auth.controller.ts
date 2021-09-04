@@ -3,6 +3,7 @@ import { sign } from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 
 import { User } from '../util/database/models/User';
+import { omit } from 'lodash';
 
 class AuthController {
   public async login(req: Request, res: Response, next: NextFunction) {
@@ -25,8 +26,10 @@ class AuthController {
         userId: user.id
       };
 
+      const loggedInUserResponse = omit(user.toObject(), ['password']);
+
       const accessToken = sign(payload, process.env.SECRET_KEY as string, { expiresIn: '24d' });
-      res.status(200).json({ message: 'Successfully logged in', accessToken });
+      res.status(200).json({ message: 'Successfully logged in', accessToken, user: loggedInUserResponse });
     } catch (error) {
       next(error);
     }
