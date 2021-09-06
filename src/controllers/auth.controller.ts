@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { compare } from 'bcrypt';
+import { omit } from 'lodash';
 
 import { User } from '../util/database/models/User';
-import { omit } from 'lodash';
-import { signJWT } from 'util/helpers';
+import { signJWT } from '../util/helpers';
 
 class AuthController {
   public async login(req: Request, res: Response, next: NextFunction) {
