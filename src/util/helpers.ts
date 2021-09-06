@@ -1,9 +1,21 @@
 import { Result, ValidationError } from 'express-validator';
+import { sign } from 'jsonwebtoken';
+
+import { User } from 'models/user.model';
 
 export enum ROLES {
   ADMIN = 'admin',
   USER = 'user'
 }
+
+export const signJWT = (user: User) => {
+  const jwtPayload = {
+    role: user.role,
+    userId: user.id
+  };
+
+  return sign(jwtPayload, process.env.SECRET_KEY as string, { expiresIn: '24d' });
+};
 
 export class CustomError extends Error {
   public statusCode: number;

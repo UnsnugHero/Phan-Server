@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { sign } from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 
 import { User } from '../util/database/models/User';
 import { omit } from 'lodash';
+import { signJWT } from 'util/helpers';
 
 class AuthController {
   public async login(req: Request, res: Response, next: NextFunction) {
@@ -21,14 +21,9 @@ class AuthController {
         return res.status(400).json({ message: 'Invalid Credentials' });
       }
 
-      const payload = {
-        role: user.role,
-        userId: user.id
-      };
-
       const loggedInUserResponse = omit(user.toObject(), ['password']);
+      const accessToken = signJWT(user);
 
-      const accessToken = sign(payload, process.env.SECRET_KEY as string, { expiresIn: '24d' });
       res.status(200).json({ message: 'Successfully logged in', accessToken, user: loggedInUserResponse });
     } catch (error) {
       next(error);

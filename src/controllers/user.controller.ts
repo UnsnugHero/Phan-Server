@@ -3,7 +3,7 @@ import { hash } from 'bcrypt';
 import { omit } from 'lodash';
 
 import { User } from '../util/database/models/User';
-import { CustomError, GenericServerError } from '../util/helpers';
+import { CustomError, GenericServerError, signJWT } from '../util/helpers';
 
 class UserController {
   public async getUser(req: Request, res: Response, next: NextFunction) {
@@ -40,8 +40,9 @@ class UserController {
 
       // get the JS object from the returned schema object and omit the password
       const newUserResponse = omit(newUser.toObject(), ['password']);
+      const accessToken = signJWT(newUser);
 
-      res.status(200).json(newUserResponse);
+      res.status(200).json({ message: 'User successfully created', accessToken, user: newUserResponse });
     } catch (error) {
       next(error);
     }
