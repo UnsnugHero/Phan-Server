@@ -17,7 +17,7 @@ class UserController {
       }
 
       return res.status(200).json({ message: 'Get user success', user });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'User not found'));
@@ -55,7 +55,7 @@ class UserController {
       const updatedUser = await User.findByIdAndUpdate(userId, newUserData);
 
       return res.status(200).json(omit(updatedUser.toObject(), ['password']));
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'User not found'));
@@ -70,7 +70,7 @@ class UserController {
     try {
       await User.findByIdAndDelete(userId);
       return res.status(200).json({ message: 'User successfully deleted' });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'User not found'));

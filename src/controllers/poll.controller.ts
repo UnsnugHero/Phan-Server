@@ -20,7 +20,7 @@ class PollController {
         message: responseMessage,
         poll: activePoll
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       next(new GenericServerError(error));
     }
@@ -42,7 +42,7 @@ class PollController {
         message: 'New poll created',
         poll: newPoll
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       next(new GenericServerError(error));
     }
@@ -58,7 +58,7 @@ class PollController {
         message: 'Poll successfully archived',
         poll: updatedPoll
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Poll not found'));
@@ -97,7 +97,7 @@ class PollController {
       }
 
       res.status(200).json({ message: `Successfully voted ${voteType} to poll`, poll: updatedPoll });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Poll not found'));

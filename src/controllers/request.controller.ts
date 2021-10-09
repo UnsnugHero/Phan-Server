@@ -21,7 +21,7 @@ class RequestController {
       }
 
       return res.status(200).json(phanRequest);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
@@ -41,7 +41,7 @@ class RequestController {
     try {
       const newRequest = await PhanRequest.create(request);
       return res.status(200).json(newRequest);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       next(new GenericServerError(error));
     }
@@ -55,7 +55,7 @@ class RequestController {
       const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, newRequestData);
 
       return res.status(200).json(updatedRequest);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
@@ -70,7 +70,7 @@ class RequestController {
     try {
       await PhanRequest.findByIdAndDelete(requestId);
       return res.status(200).json({ message: 'Request successfully deleted' });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
@@ -98,7 +98,7 @@ class RequestController {
         .skip(pageSize * (page - 1))
         .limit(pageSize);
       res.status(200).json({ results });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       next(new GenericServerError(error));
     }
@@ -126,7 +126,7 @@ class RequestController {
       }
 
       res.status(200).json({ message: 'Request successfully liked', request: updatedRequest });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
@@ -153,7 +153,7 @@ class RequestController {
       }
 
       res.status(200).json({ message: 'Request successfully unliked', request: updatedRequest });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
@@ -177,7 +177,6 @@ class RequestController {
 
     try {
       const { text } = req.body;
-      console.error(username);
 
       const newComment: RequestComment = {
         userId: userId || '',
@@ -186,14 +185,12 @@ class RequestController {
         edited: false
       };
 
-      console.error(username);
-
       const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, {
         $push: { comments: newComment }
       });
 
       return res.status(200).json({ message: 'Comment added', updatedRequest });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
@@ -231,7 +228,7 @@ class RequestController {
       }
 
       return res.status(200).json({ message: 'Comment updated', updatedRequest });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));
@@ -263,7 +260,7 @@ class RequestController {
       }
 
       return res.status(200).json({ message: 'Comment deleted', updatedRequest });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       if (error.kind === 'ObjectId') {
         next(new CustomError(404, 'Request not found'));

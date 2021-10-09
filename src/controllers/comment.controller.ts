@@ -19,7 +19,7 @@ class CommentController {
     try {
       const newGeneralComment = await GeneralComment.create(req.body);
       return res.status(200).json(newGeneralComment);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       next(new GenericServerError(error));
     }
