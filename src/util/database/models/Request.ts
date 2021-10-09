@@ -48,6 +48,10 @@ const requestSchema = new Schema({
     type: Number,
     default: 0
   },
+  postedBy: {
+    type: String,
+    required: true
+  },
   postedDate: {
     type: Date,
     default: Date.now

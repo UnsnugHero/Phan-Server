@@ -35,7 +35,8 @@ class RequestController {
 
     // construct request
     const userId = req.user?.id;
-    const request: IPhanRequest = { ...requestFields, user: userId };
+    const username = req.user?.username;
+    const request: IPhanRequest = { ...requestFields, user: userId, postedBy: username };
 
     // attempt creating new document
     try {
