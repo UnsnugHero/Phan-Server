@@ -11,10 +11,6 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
-    isAnonymous: {
-      type: Boolean,
-      default: true
-    },
     role: {
       type: String,
       enum: [ROLES.USER, ROLES.ADMIN],

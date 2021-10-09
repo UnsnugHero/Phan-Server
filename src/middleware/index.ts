@@ -20,7 +20,8 @@ export const authToken = (req: Request, res: Response, next: NextFunction) => {
     const verified = verify(authHeader, process.env.SECRET_KEY as string) as JwtPayload;
     req.user = {
       role: verified.role,
-      id: verified.userId
+      id: verified.userId,
+      username: verified.username
     };
 
     next();

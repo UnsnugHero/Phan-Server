@@ -7,6 +7,7 @@ export type RequestSortOn = 'postedDate';
 export interface RequestComment {
   id?: string | Types.ObjectId;
   userId: string | Types.ObjectId;
+  username?: string;
   text: string;
   postedDate?: Date;
   edited: boolean;
@@ -18,6 +19,7 @@ export interface RequestSearchQuery {
   sortDir?: SortDir;
   pageSize?: number;
   page?: number;
+  completed?: boolean;
 }
 
 export interface IPhanRequest extends Document {

@@ -7,7 +7,7 @@ import { CustomError, GenericServerError, signJWT } from '../util/helpers';
 
 class UserController {
   public async getUser(req: Request, res: Response, next: NextFunction) {
-    const userId: string = req.params.userId;
+    const userId = req.user?.id;
 
     try {
       const user = await User.findById(userId).select('-password');
@@ -16,7 +16,7 @@ class UserController {
         return res.status(404).json({ message: 'User not found' });
       }
 
-      return res.status(200).json(user);
+      return res.status(200).json({ message: 'Get user success', user });
     } catch (error) {
       console.error(error);
       if (error.kind === 'ObjectId') {
@@ -28,21 +28,20 @@ class UserController {
 
   public async createNewUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const { username, password, isAnonymous, role } = req.body;
+      const { username, password, role } = req.body;
       const encryptedPassword = await hash(password, 10);
 
       const newUser = await User.create({
         username,
         password: encryptedPassword,
-        isAnonymous,
         role
       });
 
       // get the JS object from the returned schema object and omit the password
       const newUserResponse = omit(newUser.toObject(), ['password']);
-      const accessToken = signJWT(newUser);
+      const authToken = signJWT(newUser);
 
-      res.status(200).json({ message: 'User successfully created', accessToken, user: newUserResponse });
+      res.status(200).json({ message: 'User successfully created', authToken, user: newUserResponse });
     } catch (error) {
       next(error);
     }

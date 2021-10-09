@@ -18,7 +18,7 @@ class UserRouter {
   }
 
   private _initializeRoutes() {
-    this._router.get('/:userId', authToken, this._controller.getUser);
+    this._router.get('/', authToken, this._controller.getUser);
     this._router.post('/create', validatorMiddleware(Validator.CREATE_USER), this._controller.createNewUser);
     this._router.put(
       '/:userId',

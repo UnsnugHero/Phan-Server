@@ -11,7 +11,8 @@ export enum ROLES {
 export const signJWT = (user: User) => {
   const jwtPayload = {
     role: user.role,
-    userId: user.id
+    userId: user.id,
+    username: user.username
   };
 
   return sign(jwtPayload, process.env.SECRET_KEY as string, { expiresIn: '24d' });

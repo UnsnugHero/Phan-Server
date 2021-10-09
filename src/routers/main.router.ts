@@ -28,7 +28,7 @@ class MainRouter {
     this._router.use('/comments', this._commentRouter);
     this._router.use('/poll', this._pollRouter);
     this._router.use('/requests', this._requestRouter);
-    this._router.use('/users', this._userRouter);
+    this._router.use('/user', this._userRouter);
   }
 }
 

@@ -6,6 +6,10 @@ const requestCommentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
+    username: {
+      type: String,
+      default: 'Anon'
+    },
     text: {
       type: String,
       required: true

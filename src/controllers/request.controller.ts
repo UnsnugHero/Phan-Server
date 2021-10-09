@@ -80,12 +80,14 @@ class RequestController {
   }
 
   public async searchRequests(req: Request, res: Response, next: NextFunction) {
-    const { subject, sortOn } = req.body;
+    const { subject, filters } = req.body;
+    const sortOn = req.body.sortOn || 'postedDate';
     const sortDir = req.body.sortDir || 'desc';
     const pageSize = req.body.pageSize || 25;
     const page = req.body.page || 1;
 
-    const query: RequestSearchQuery = {};
+    const query: RequestSearchQuery = { ...filters };
+
     if (subject !== '') {
       query['subject'] = subject;
     }
@@ -170,16 +172,21 @@ class RequestController {
   // TODO: needs validator, text is not empty
   public async postComment(req: Request, res: Response, next: NextFunction) {
     const userId = req.user?.id;
+    const username = req.user?.username;
     const { requestId } = req.params;
 
     try {
       const { text } = req.body;
+      console.error(username);
 
       const newComment: RequestComment = {
         userId: userId || '',
+        username,
         text,
         edited: false
       };
+
+      console.error(username);
 
       const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, {
         $push: { comments: newComment }
