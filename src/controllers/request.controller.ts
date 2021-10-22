@@ -90,7 +90,7 @@ class RequestController {
     const query: RequestSearchQuery = { ...filters };
 
     if (subject !== '') {
-      query['subject'] = subject;
+      query['subject'] = { $regex: subject, $options: 'i' };
     }
 
     try {
@@ -257,7 +257,7 @@ class RequestController {
       );
 
       if (!updatedRequest) {
-        return res.status(400).json({ message: 'Error deleting request' });
+        return res.status(400).json({ message: 'Error deleting request comment' });
       }
 
       return res.status(200).json({ message: 'Comment deleted', updatedRequest });

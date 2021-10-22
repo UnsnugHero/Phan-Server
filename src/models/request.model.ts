@@ -14,7 +14,7 @@ export interface RequestComment {
 }
 
 export interface RequestSearchQuery {
-  subject?: string;
+  subject?: Object | string;
   sortOn?: RequestSortOn;
   sortDir?: SortDir;
   pageSize?: number;
