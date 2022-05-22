@@ -15,7 +15,13 @@ const userSchema = new Schema(
       type: String,
       enum: [ROLES.USER, ROLES.ADMIN],
       default: 'user'
-    }
+    },
+    votedPolls: [
+      new Schema({
+        pollId: Schema.Types.ObjectId,
+        yesVote: Boolean
+      })
+    ]
   },
   { timestamps: true }
 );

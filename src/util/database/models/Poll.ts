@@ -10,8 +10,14 @@ export const pollSchema = new Schema(
       type: Boolean,
       required: true
     },
-    yesVotes: [Schema.Types.ObjectId],
-    noVotes: [Schema.Types.ObjectId]
+    yesVotes: {
+      type: Number,
+      default: 0
+    },
+    noVotes: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );

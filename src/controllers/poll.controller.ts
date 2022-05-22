@@ -76,19 +76,22 @@ class PollController {
   }
 
   private async _votePoll(req: Request, res: Response, next: NextFunction, vote: boolean) {
-    const addVoteField = vote ? 'yesVotes' : 'noVotes';
-    const pullVoteField = vote ? 'noVotes' : 'yesVotes';
+    const hasVoted = req.body.hasVoted;
     const voteType = vote ? 'yes' : 'no';
+    let yesVoteIncValue = vote ? 1 : 0;
+    let noVoteIncValue = vote ? 0 : 1;
 
-    const userId = req.user?.id;
+    if (hasVoted) {
+      vote ? noVoteIncValue-- : yesVoteIncValue--;
+    }
+
     const { pollId } = req.params;
 
     try {
       const updatedPoll = await Poll.findOneAndUpdate(
-        { _id: pollId, [addVoteField]: { $ne: userId } },
+        { _id: pollId },
         {
-          $addToSet: { [addVoteField]: userId },
-          $pull: { [pullVoteField]: userId }
+          $inc: { yesVotes: yesVoteIncValue, noVotes: noVoteIncValue }
         }
       );
 
