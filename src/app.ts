@@ -10,7 +10,9 @@ import MainRouter from './routers/main.router';
 
 const chalk = require('chalk');
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: path.resolve(__dirname, '../.env') });
+}
 
 class PhanServer {
   public app = express();
