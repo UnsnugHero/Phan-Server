@@ -6,6 +6,7 @@
   "scripts": {
     "server": "nodemon src/app.ts",
     "build": "tsc -p .",
+    "start": "node dist/app.js",
     "restart": "pm2 startOrRestart ecosystem.config.js",
     "deploy:setup": "pm2 deploy ecosystem.config.js production setup",
     "deploy": "pm2 deploy ecosystem.config.js production",

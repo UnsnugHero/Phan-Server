@@ -8,7 +8,7 @@ import { connectDB } from './util/database/config';
 import { errorHandler } from './middleware';
 import MainRouter from './routers/main.router';
 
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config({ path: path.resolve(__dirname, '../.env') });

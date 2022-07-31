@@ -39,6 +39,7 @@ class UserController {
 
       // get the JS object from the returned schema object and omit the password
       const newUserResponse = omit(newUser.toObject(), ['password']);
+      // @ts-ignore
       const authToken = signJWT(newUser);
 
       res.status(200).json({ message: 'User successfully created', authToken, user: newUserResponse });
@@ -54,6 +55,7 @@ class UserController {
       const newUserData = { ...req.body };
       const updatedUser = await User.findByIdAndUpdate(userId, newUserData);
 
+      // @ts-ignore
       return res.status(200).json(omit(updatedUser.toObject(), ['password']));
     } catch (error: any) {
       console.error(error);

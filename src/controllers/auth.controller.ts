@@ -22,6 +22,7 @@ class AuthController {
       }
 
       const loggedInUserResponse = omit(user.toObject(), ['password']);
+      // @ts-ignore
       const authToken = signJWT(user);
 
       res.status(200).json({ message: 'Successfully logged in', authToken, user: loggedInUserResponse });
