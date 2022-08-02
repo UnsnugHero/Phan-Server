@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 export const connectDB = async () => {
   try {
@@ -10,7 +9,7 @@ export const connectDB = async () => {
     mongoose.set('returnOriginal', false);
 
     console.log(chalk.green('Mongo Connected...\n'));
-  } catch (error: any) {
+  } catch (error) {
     console.error(error.message);
     // Exit process with failure
     process.exit(1);

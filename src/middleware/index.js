@@ -1,7 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
-import { JwtPayload, verify } from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 
-import { ErrorResponse } from '../models/general.model';
 import { CustomError, ROLES } from '../util/helpers';
 
 /**
@@ -10,14 +8,14 @@ import { CustomError, ROLES } from '../util/helpers';
  * @param res
  * @param next
  */
-export const authToken = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['x-auth-token'] as string;
+export const authToken = (req, res, next) => {
+  const authHeader = req.headers['x-auth-token'];
   if (!authHeader) {
     throw new CustomError(401, 'No token, not authorized');
   }
 
   try {
-    const verified = verify(authHeader, process.env.SECRET_KEY as string) as JwtPayload;
+    const verified = verify(authHeader, process.env.SECRET_KEY);
     req.user = {
       role: verified.role,
       id: verified.userId,
@@ -36,7 +34,7 @@ export const authToken = (req: Request, res: Response, next: NextFunction) => {
  * @param res
  * @param next
  */
-export const authRole = (req: Request, res: Response, next: NextFunction) => {
+export const authRole = (req, _res, next) => {
   const role = req.user?.role;
 
   if (!role) {
@@ -58,8 +56,8 @@ export const authRole = (req: Request, res: Response, next: NextFunction) => {
  * @param res
  * @param _next
  */
-export const errorHandler = (err: CustomError, _req: Request, res: Response, _next: NextFunction) => {
-  const errorResponse: ErrorResponse = {
+export const errorHandler = (err, _req, res, _next) => {
+  const errorResponse = {
     status: 'error',
     statusCode: err.statusCode,
     message: err.message,
