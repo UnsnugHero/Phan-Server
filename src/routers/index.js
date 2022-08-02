@@ -1,9 +1,13 @@
-import express from 'express';
+import { Router } from 'express';
 
-import MainRouter from './main.router.js';
+import AuthRouter from './auth.router.js';
 
-const router = express.Router();
+const router = Router();
 
-router.use('/test', MainRouter);
+router.use('/test', (req, res) => {
+  res.send('Oh baby a triple!!!');
+});
+
+router.use('/auth', AuthRouter);
 
 export default router;
