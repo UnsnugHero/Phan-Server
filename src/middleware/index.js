@@ -1,6 +1,7 @@
-import { verify } from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
+const { verify } = jsonwebtoken;
 
-import { CustomError, ROLES } from '../util/helpers';
+import { CustomError } from '../util/helpers.js';
 
 /**
  * Authorizes the request on the JWT that may or may not be attached to the request

@@ -5,6 +5,6 @@ import { validatorMiddleware } from '../middleware/validators/index.js';
 
 const router = Router();
 
-router.post('/login', validatorMiddleware(Validator.LOGIN), AuthController.login);
+router.post('/login', validatorMiddleware('login'), AuthController.login);
 
 export default router;

@@ -1,5 +1,5 @@
 import { compare } from 'bcrypt';
-import { omit } from 'lodash';
+import omit from 'lodash.omit';
 
 import { User } from '../util/database/models/index.js';
 import { signJWT } from '../util/helpers.js';

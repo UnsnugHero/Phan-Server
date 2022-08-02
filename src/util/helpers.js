@@ -1,5 +1,5 @@
-import { Result, ValidationError } from 'express-validator';
-import { sign } from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
+const { sign } = jsonwebtoken;
 
 export const signJWT = (user) => {
   const jwtPayload = {
