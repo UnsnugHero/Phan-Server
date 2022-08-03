@@ -68,16 +68,20 @@ export async function deleteRequest(req, res, next) {
 }
 
 export async function searchRequests(req, res, next) {
-  const { subject, filters } = req.body;
+  const { subject, completed } = req.body;
   const sortOn = req.body.sortOn || 'postedDate';
   const sortDir = req.body.sortDir || 'desc';
   const pageSize = req.body.pageSize || 25;
   const page = req.body.page || 1;
 
-  const query = { ...filters };
+  const query = {};
 
   if (subject !== '') {
     query['subject'] = { $regex: subject, $options: 'i' };
+  }
+
+  if (req.body.hasOwnProperty('completed')) {
+    query['completed'] = completed;
   }
 
   try {

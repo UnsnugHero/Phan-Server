@@ -49,6 +49,7 @@ export const validatorMiddleware = (validatorType) => {
     // check for validation errors
     const errors = validationResult(req);
 
+    debugger;
     if (!errors.isEmpty()) {
       throw new CustomError(400, 'Error validating request', undefined, errors);
     }
