@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { ROLES } from '../../helpers';
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
 
 const userSchema = new Schema(
   {
@@ -13,7 +13,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: [ROLES.USER, ROLES.ADMIN],
+      enum: ['user'],
       default: 'user'
     },
     votedPolls: [

@@ -1,56 +1,55 @@
-import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
-import { loginValidators } from './auth.validators';
-import { createUserValidators, updateUserValidators } from './users.validators';
+import { loginValidators } from './auth.validators.js';
+import { createUserValidators, updateUserValidators } from './users.validators.js';
 import {
   createRequestValidators,
   postCommentValidators,
   searchRequestValidators,
   updateCommentValidators,
   updateRequestValidators
-} from './request.validators';
+} from './request.validators.js';
 
-import { Validator } from '../../models/general.model';
-import { CustomError } from '../../util/helpers';
+import { CustomError } from '../../util/helpers.js';
 
 /**
  * Validator Map used to identify which middleware validators will be applied to the current route.
  */
-const validatorMap = (validatorType?: Validator) => {
+const validatorMap = (validatorType) => {
   switch (validatorType) {
     // Auth Validation
-    case Validator.LOGIN:
+    case 'login':
       return loginValidators;
 
     // Request Validation
-    case Validator.CREATE_REQUEST:
+    case 'create_request':
       return createRequestValidators;
-    case Validator.SEARCH_REQUEST:
+    case 'search_request':
       return searchRequestValidators;
-    case Validator.UPDATE_REQUEST:
+    case 'update_request':
       return updateRequestValidators;
 
-    case Validator.POST_COMMENT:
+    case 'post_comment':
       return postCommentValidators;
-    case Validator.UPDATE_COMMENT:
+    case 'update_comment':
       return updateCommentValidators;
 
     // User Validation
-    case Validator.CREATE_USER:
+    case 'create_user':
       return createUserValidators;
-    case Validator.UPDATE_USER:
+    case 'update_user':
       return updateUserValidators;
     default:
       return [];
   }
 };
 
-export const validatorMiddleware = (validatorType?: Validator) => {
-  const validationErrorHandler = (req: Request, res: Response, next: NextFunction) => {
+export const validatorMiddleware = (validatorType) => {
+  const validationErrorHandler = (req, _res, next) => {
     // check for validation errors
     const errors = validationResult(req);
 
+    debugger;
     if (!errors.isEmpty()) {
       throw new CustomError(400, 'Error validating request', undefined, errors);
     }

@@ -1,10 +1,10 @@
 import { check } from 'express-validator';
 
-import { User } from '../../util/database/models/User';
+import { User } from '../../util/database/models/index.js';
 
 // Create User Validators & Helpers
 
-const checkDuplicateUsername = async (username: string) => {
+const checkDuplicateUsername = async (username) => {
   const user = await User.findOne({ username });
   if (user) return Promise.reject();
 };
