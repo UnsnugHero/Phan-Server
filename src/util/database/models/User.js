@@ -19,7 +19,7 @@ const userSchema = new Schema(
     votedPolls: [
       new Schema({
         pollId: Schema.Types.ObjectId,
-        yesVote: Boolean
+        isYesVote: Boolean
       })
     ]
   },

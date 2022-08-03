@@ -8,8 +8,10 @@
     "node": ">=14.16"
   },
   "scripts": {
-    "dev": "nodemon --inspect src/app.js",
-    "start": "node --inspect src/app.js",
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "dev:inspect": "nodemon --inspect src/app.js",
+    "start:inspect": "node --inspect src/app.js",
     "restart": "pm2 startOrRestart ecosystem.config.js",
     "deploy:setup": "pm2 deploy ecosystem.config.js production setup",
     "deploy": "pm2 deploy ecosystem.config.js production",

@@ -1,4 +1,4 @@
-import { Poll } from '../util/database/models/index.js';
+import { Poll, User } from '../util/database/models/index.js';
 import { CustomError, GenericServerError } from '../util/helpers.js';
 
 // only one poll should be active at any given time
@@ -60,11 +60,56 @@ export async function archivePoll(req, res, next) {
 }
 
 export async function voteYesPoll(req, res, next) {
-  await this._votePoll(req, res, next, true);
+  try {
+    const { votedPolls } = await User.findById(req.user.id).select('votedPolls').lean();
+    const { pollId } = req.params;
+    let noVoteInc = 0;
+
+    // check if user has voted for this poll already
+    const votedPoll = votedPolls.find((poll) => poll.pollId === pollId);
+    if (votedPoll) {
+      // have they already voted yes? return error
+      if (votedPoll.isYesVote) {
+        return res.status(400).json({ message: 'You have already voted yes to this poll' });
+      }
+      // if they have voted no, they switch to yes. subtract 1 from no votes
+      else {
+        noVoteInc--;
+      }
+    }
+
+    // check
+
+    const updatedPoll = await Poll.findOneAndUpdate(
+      { _id: pollId },
+      {
+        $inc: { yesVotes: 1, noVotes: noVoteInc }
+      }
+    );
+
+    await User.findByIdAndUpdate(
+      { _id: req.user.id },
+      {
+        $push: {
+          votedPolls: {
+            pollId,
+            isYesVote: true
+          }
+        }
+      }
+    );
+
+    res.status(200).json({ message: `Successfully voted yes to poll`, poll: updatedPoll });
+  } catch (error) {
+    if (error.kind === 'ObjectId') {
+      next(new CustomError(404, 'Poll not found'));
+    }
+    next(new GenericServerError(error));
+  }
 }
 
 export async function voteNoPoll(req, res, next) {
-  await this._votePoll(req, res, next, false);
+  await _votePoll(req, res, next, false);
 }
 
 async function _votePoll(req, res, next, vote) {
@@ -77,23 +122,8 @@ async function _votePoll(req, res, next, vote) {
     vote ? noVoteIncValue-- : yesVoteIncValue--;
   }
 
-  const { pollId } = req.params;
-
   try {
-    const updatedPoll = await Poll.findOneAndUpdate(
-      { _id: pollId },
-      {
-        $inc: { yesVotes: yesVoteIncValue, noVotes: noVoteIncValue }
-      }
-    );
-
-    if (!updatedPoll) {
-      return res.status(400).json({ message: `You have already voted ${voteType} to this poll` });
-    }
-
-    res.status(200).json({ message: `Successfully voted ${voteType} to poll`, poll: updatedPoll });
   } catch (error) {
-    console.error(error);
     if (error.kind === 'ObjectId') {
       next(new CustomError(404, 'Poll not found'));
     }
