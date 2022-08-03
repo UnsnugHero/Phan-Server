@@ -16,7 +16,6 @@ export async function getUser(req, res, next) {
 
     return res.status(200).json({ message: 'Get user success', user });
   } catch (error) {
-    console.error(error);
     if (error.kind === 'ObjectId') {
       next(new CustomError(404, 'User not found'));
     }
@@ -37,7 +36,6 @@ export async function createNewUser(req, res, next) {
 
     // get the JS object from the returned schema object and omit the password
     const newUserResponse = omit(newUser.toObject(), ['password']);
-    // @ts-ignore
     const authToken = signJWT(newUser);
 
     res.status(200).json({ message: 'User successfully created', authToken, user: newUserResponse });
@@ -53,10 +51,8 @@ export async function updateUser(req, res, next) {
     const newUserData = { ...req.body };
     const updatedUser = await User.findByIdAndUpdate(userId, newUserData);
 
-    // @ts-ignore
     return res.status(200).json(omit(updatedUser.toObject(), ['password']));
   } catch (error) {
-    console.error(error);
     if (error.kind === 'ObjectId') {
       next(new CustomError(404, 'User not found'));
     }
@@ -71,7 +67,6 @@ export async function deleteUser(req, res, next) {
     await User.findByIdAndDelete(userId);
     return res.status(200).json({ message: 'User successfully deleted' });
   } catch (error) {
-    console.error(error);
     if (error.kind === 'ObjectId') {
       next(new CustomError(404, 'User not found'));
     }
