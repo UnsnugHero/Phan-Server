@@ -10,3 +10,5 @@ router.post('/create', [authToken, authRole], PollController.createNewPoll);
 router.put('/archive/:pollId', [authToken, authRole], PollController.archivePoll);
 router.put('/vote/yes/:pollId', [authToken], PollController.voteYesPoll);
 router.put('/vote/no/:pollId', [authToken], PollController.voteNoPoll);
+
+export default router;
