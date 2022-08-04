@@ -16,12 +16,9 @@ const userSchema = new Schema(
       enum: ['user'],
       default: 'user'
     },
-    votedPolls: [
-      new Schema({
-        pollId: Schema.Types.ObjectId,
-        isYesVote: Boolean
-      })
-    ]
+    votedPolls: {
+      type: Array
+    }
   },
   { timestamps: true }
 );
