@@ -13,6 +13,7 @@ module.exports = {
       ref: 'origin/main',
       repo: 'git@github.com:UnsnugHero/Phan-Server.git',
       path: '/home/ubuntu/phan-server',
+      'pre-setup': 'rm -rf phan-server',
       'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
     }
   }
