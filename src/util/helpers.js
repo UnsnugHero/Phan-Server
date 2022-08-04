@@ -1,6 +1,3 @@
-import jsonwebtoken from 'jsonwebtoken';
-const { sign } = jsonwebtoken;
-
 const sign = require('jsonwebtoken').sign;
 
 const signJWT = (user) => {

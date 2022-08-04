@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-export const pollSchema = new mongoose.Schema(
+const pollSchema = new mongoose.Schema(
   {
     title: {
       type: String,

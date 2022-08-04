@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const requestCommentSchema = new mongoose.Schema(
   {
     userId: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
     username: {
@@ -28,7 +28,7 @@ const requestCommentSchema = new mongoose.Schema(
 
 const requestSchema = new mongoose.Schema({
   user: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
   subject: {
@@ -42,7 +42,7 @@ const requestSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  likes: [Schema.Types.ObjectId],
+  likes: [mongoose.Schema.Types.ObjectId],
   likesCount: {
     type: Number,
     default: 0

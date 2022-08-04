@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-export const generalCommentSchema = new mongoose.Schema(
+const generalCommentSchema = new mongoose.Schema(
   {
     content: {
       type: String,
