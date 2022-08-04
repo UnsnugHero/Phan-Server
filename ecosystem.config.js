@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'phan-server',
-      script: './dist/app.js'
+      script: './src/app.js'
     }
   ],
   deploy: {
@@ -13,7 +13,7 @@ module.exports = {
       ref: 'origin/main',
       repo: 'git@github.com:UnsnugHero/Phan-Server.git',
       path: '/home/ubuntu/phan-server',
-      'post-deploy': 'npm install && npm run build && pm2 startOrRestart ecosystem.config.js'
+      'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
     }
   }
 };
