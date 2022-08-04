@@ -1,8 +1,9 @@
-import { Poll, User } from '../util/database/models/index.js';
-import { CustomError, GenericServerError } from '../util/helpers.js';
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const Poll = mongoose.model('Poll');
 
 // only one poll should be active at any given time
-export async function getCurrentPoll(req, res, next) {
+async function getCurrentPoll(req, res, next) {
   try {
     const activePoll = await Poll.findOne({ active: true });
 
@@ -13,12 +14,11 @@ export async function getCurrentPoll(req, res, next) {
       poll: activePoll
     });
   } catch (error) {
-    console.error(error);
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function createNewPoll(req, res, next) {
+async function createNewPoll(req, res, next) {
   try {
     const existingPoll = await Poll.findOne({ active: true });
 
@@ -35,12 +35,11 @@ export async function createNewPoll(req, res, next) {
       poll: newPoll
     });
   } catch (error) {
-    console.error(error);
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function archivePoll(req, res, next) {
+async function archivePoll(req, res, next) {
   const pollId = req.params.pollId;
 
   try {
@@ -51,22 +50,16 @@ export async function archivePoll(req, res, next) {
       poll: updatedPoll
     });
   } catch (error) {
-    console.error(error);
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Poll not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function voteYesPoll(req, res, next) {
+async function voteYesPoll(req, res, next) {
   try {
     const user = await User.findById(req.user.id).select('votedPolls').lean();
     const votedPolls = [...user.votedPolls];
     const { pollId } = req.params;
     let noVoteDecr = 0;
-
-    debugger;
 
     // check if user has voted for this poll already
     const idx = votedPolls.findIndex((poll) => poll.pollId === pollId);
@@ -95,14 +88,11 @@ export async function voteYesPoll(req, res, next) {
 
     res.status(200).json({ message: `Successfully voted yes to poll`, poll: updatedPoll });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Poll not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function voteNoPoll(req, res, next) {
+async function voteNoPoll(req, res, next) {
   try {
     const user = await User.findById(req.user.id).select('votedPolls').lean();
     const votedPolls = [...user.votedPolls];
@@ -137,9 +127,14 @@ export async function voteNoPoll(req, res, next) {
 
     res.status(200).json({ message: `Successfully voted no to poll`, poll: updatedPoll });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Poll not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
+
+module.exports = {
+  getCurrentPoll,
+  createNewPoll,
+  archivePoll,
+  voteYesPoll,
+  voteNoPoll
+};

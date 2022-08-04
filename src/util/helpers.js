@@ -1,7 +1,7 @@
 import jsonwebtoken from 'jsonwebtoken';
 const { sign } = jsonwebtoken;
 
-export const signJWT = (user) => {
+const signJWT = (user) => {
   const jwtPayload = {
     role: user.role,
     userId: user.id,
@@ -11,7 +11,7 @@ export const signJWT = (user) => {
   return sign(jwtPayload, process.env.SECRET_KEY, { expiresIn: '24d' });
 };
 
-export class CustomError extends Error {
+class CustomError extends Error {
   statusCode;
   message;
   error;
@@ -27,8 +27,12 @@ export class CustomError extends Error {
   }
 }
 
-export class GenericServerError extends CustomError {
+class GenericServerError extends CustomError {
   constructor(error) {
     super(500, 'Server Error', error);
   }
 }
+
+module.exports = {
+  signJWT
+};
