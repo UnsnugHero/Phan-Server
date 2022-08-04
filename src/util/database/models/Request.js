@@ -1,10 +1,9 @@
-import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+const mongoose = require('mongoose');
 
-const requestCommentSchema = new Schema(
+const requestCommentSchema = new mongoose.Schema(
   {
     userId: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
     username: {
@@ -27,9 +26,9 @@ const requestCommentSchema = new Schema(
   { timestamps: true }
 );
 
-const requestSchema = new Schema({
+const requestSchema = new mongoose.Schema({
   user: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
   subject: {
@@ -43,7 +42,7 @@ const requestSchema = new Schema({
     type: String,
     required: true
   },
-  likes: [Schema.Types.ObjectId],
+  likes: [mongoose.Schema.Types.ObjectId],
   likesCount: {
     type: Number,
     default: 0
@@ -71,4 +70,4 @@ const requestSchema = new Schema({
   comments: [requestCommentSchema]
 });
 
-export const Request = model('Request', requestSchema);
+mongoose.model('Request', requestSchema);

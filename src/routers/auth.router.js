@@ -1,10 +1,8 @@
-import { Router } from 'express';
+const router = require('express').Router();
 
-import { AuthController } from '../controllers/index.js';
-import { validatorMiddleware } from '../middleware/validators/index.js';
-
-const router = Router();
+const AuthController = require('../controllers/auth.controller');
+const validatorMiddleware = require('../middleware/validators/index');
 
 router.post('/login', validatorMiddleware('login'), AuthController.login);
 
-export default router;
+module.exports = router;

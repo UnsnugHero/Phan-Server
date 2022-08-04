@@ -1,34 +1,13 @@
-import jsonwebtoken from 'jsonwebtoken';
-const { sign } = jsonwebtoken;
+const sign = require('jsonwebtoken').sign;
 
-export const signJWT = (user) => {
+const signJWT = (user) => {
   const jwtPayload = {
     role: user.role,
     userId: user.id,
     username: user.username
   };
 
-  return sign(jwtPayload, process.env.SECRET_KEY, { expiresIn: '24d' });
+  return sign(jwtPayload, process.env.SECRET_KEY, { expiresIn: '1d' });
 };
 
-export class CustomError extends Error {
-  statusCode;
-  message;
-  error;
-  validationErrors;
-
-  constructor(statusCode, message, error, validationErrors) {
-    super();
-
-    this.statusCode = statusCode;
-    this.message = message;
-    this.error = error;
-    this.validationErrors = validationErrors;
-  }
-}
-
-export class GenericServerError extends CustomError {
-  constructor(error) {
-    super(500, 'Server Error', error);
-  }
-}
+module.exports = signJWT;

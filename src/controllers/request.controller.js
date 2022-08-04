@@ -1,11 +1,11 @@
-import { CustomError, GenericServerError } from '../util/helpers.js';
-import { Request as PhanRequest } from '../util/database/models/index.js';
+const mongoose = require('mongoose');
+const Request = mongoose.model('Request');
 
-export async function getRequest(req, res, next) {
+async function getRequest(req, res, next) {
   const requestId = req.params.requestId;
 
   try {
-    const phanRequest = await PhanRequest.findById(requestId);
+    const phanRequest = await Request.findById(requestId);
 
     if (!phanRequest) {
       return res.status(404).json({ message: 'Request not found' });
@@ -13,14 +13,11 @@ export async function getRequest(req, res, next) {
 
     return res.status(200).json(phanRequest);
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Request not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function createRequest(req, res, next) {
+async function createRequest(req, res, next) {
   const { ...requestFields } = req.body;
 
   // construct request
@@ -30,44 +27,38 @@ export async function createRequest(req, res, next) {
 
   // attempt creating new document
   try {
-    const newRequest = await PhanRequest.create(request);
+    const newRequest = await Request.create(request);
     return res.status(200).json(newRequest);
   } catch (error) {
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function updateRequest(req, res, next) {
+async function updateRequest(req, res, next) {
   const requestId = req.params.requestId;
 
   try {
     const newRequestData = { ...req.body, edited: true };
-    const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, newRequestData);
+    const updatedRequest = await Request.findByIdAndUpdate(requestId, newRequestData);
 
     return res.status(200).json(updatedRequest);
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Request not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function deleteRequest(req, res, next) {
+async function deleteRequest(req, res, next) {
   const requestId = req.params.requestId;
 
   try {
-    await PhanRequest.findByIdAndDelete(requestId);
+    await Request.findByIdAndDelete(requestId);
     return res.status(200).json({ message: 'Request successfully deleted' });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Request not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function searchRequests(req, res, next) {
+async function searchRequests(req, res, next) {
   const { subject, completed } = req.body;
   const sortOn = req.body.sortOn || 'postedDate';
   const sortDir = req.body.sortDir || 'desc';
@@ -85,13 +76,13 @@ export async function searchRequests(req, res, next) {
   }
 
   try {
-    const results = await PhanRequest.find(query)
+    const results = await Request.find(query)
       .sort({ [sortOn]: sortDir })
       .skip(pageSize * (page - 1))
       .limit(pageSize);
     res.status(200).json({ results });
   } catch (error) {
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
@@ -99,12 +90,12 @@ export async function searchRequests(req, res, next) {
  * Request Likes CRUD
  *************************************/
 
-export async function likeRequest(req, res, next) {
+async function likeRequest(req, res, next) {
   const userId = req.user?.id;
   const { requestId } = req.params;
 
   try {
-    const updatedRequest = await PhanRequest.findOneAndUpdate(
+    const updatedRequest = await Request.findOneAndUpdate(
       { _id: requestId, likes: { $ne: userId } },
       {
         $addToSet: { likes: userId },
@@ -118,20 +109,16 @@ export async function likeRequest(req, res, next) {
 
     res.status(200).json({ message: 'Request successfully liked', request: updatedRequest });
   } catch (error) {
-    console.error(error);
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Request not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function unlikeRequest(req, res, next) {
+async function unlikeRequest(req, res, next) {
   const userId = req.user?.id;
   const { requestId } = req.params;
 
   try {
-    const updatedRequest = await PhanRequest.findOneAndUpdate(
+    const updatedRequest = await Request.findOneAndUpdate(
       { _id: requestId, likes: { $in: userId } },
       {
         $pull: { likes: userId },
@@ -145,10 +132,7 @@ export async function unlikeRequest(req, res, next) {
 
     res.status(200).json({ message: 'Request successfully unliked', request: updatedRequest });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Request not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
@@ -160,7 +144,7 @@ export async function unlikeRequest(req, res, next) {
 // the GET request will have the comments needed
 
 // TODO: needs validator, text is not empty
-export async function postComment(req, res, next) {
+async function postComment(req, res, next) {
   const userId = req.user?.id;
   const username = req.user?.username;
   const { requestId } = req.params;
@@ -175,28 +159,25 @@ export async function postComment(req, res, next) {
       edited: false
     };
 
-    const updatedRequest = await PhanRequest.findByIdAndUpdate(requestId, {
+    const updatedRequest = await Request.findByIdAndUpdate(requestId, {
       $push: { comments: newComment }
     });
 
     return res.status(200).json({ message: 'Comment added', updatedRequest });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Request not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
 // TODO needs validator on text is not empty
-export async function updateComment(req, res, next) {
+async function updateComment(req, res, next) {
   const userId = req.user?.id;
   const { requestId, commentId } = req.params;
 
   try {
     const { text } = req.body;
 
-    const updatedRequest = await PhanRequest.findOneAndUpdate(
+    const updatedRequest = await Request.findOneAndUpdate(
       {
         _id: requestId,
         comments: {
@@ -218,19 +199,16 @@ export async function updateComment(req, res, next) {
 
     return res.status(200).json({ message: 'Comment updated', updatedRequest });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Request not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function deleteComment(req, res, next) {
+async function deleteComment(req, res, next) {
   const userId = req.user?.id;
   const { requestId, commentId } = req.params;
 
   try {
-    const updatedRequest = await PhanRequest.findOneAndUpdate(
+    const updatedRequest = await Request.findOneAndUpdate(
       {
         _id: requestId,
         comments: {
@@ -249,9 +227,19 @@ export async function deleteComment(req, res, next) {
 
     return res.status(200).json({ message: 'Comment deleted', updatedRequest });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'Request not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
+
+module.exports = {
+  getRequest,
+  createRequest,
+  updateRequest,
+  deleteRequest,
+  searchRequests,
+  likeRequest,
+  unlikeRequest,
+  postComment,
+  updateComment,
+  deleteComment
+};

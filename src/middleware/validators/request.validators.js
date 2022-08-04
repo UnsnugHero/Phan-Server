@@ -1,6 +1,7 @@
-import { check } from 'express-validator';
+const mongoose = require('mongoose');
+const check = require('express-validator').check;
 
-import { Request } from '../../util/database/models/index.js';
+const Request = mongoose.model('Request');
 
 // Create Request Validators & Helpers
 
@@ -9,7 +10,7 @@ const checkDuplicateRequestSubject = async (subject) => {
   if (request) return Promise.reject();
 };
 
-export const createRequestValidators = [
+const createRequestValidators = [
   check(['subject', 'location'], 'Field cannot be empty').notEmpty(),
   check('subject', 'A Request with this subject already exists').custom((subject) =>
     checkDuplicateRequestSubject(subject)
@@ -17,7 +18,7 @@ export const createRequestValidators = [
 ];
 
 // Searh Request Validators
-export const searchRequestValidators = [check('subject', 'This field must exist').exists()];
+const searchRequestValidators = [check('subject', 'This field must exist').exists()];
 
 // Update Request Validators & Helpers
 
@@ -28,7 +29,7 @@ const checkDuplicateRequestSubjectUpdate = async (subject, req) => {
   if (request && requestId !== request.id) return Promise.reject();
 };
 
-export const updateRequestValidators = [
+const updateRequestValidators = [
   check(['subject', 'location'], 'Field cannot be empty').notEmpty(),
   check('subject', 'A Request with this subject already exists').custom((subject, { req }) =>
     checkDuplicateRequestSubjectUpdate(subject, req)
@@ -36,6 +37,13 @@ export const updateRequestValidators = [
 ];
 
 // Post comment validators
+const postCommentValidators = [check(['text'], 'Field is required').notEmpty()];
+const updateCommentValidators = [check(['text'], 'Field is required').notEmpty()];
 
-export const postCommentValidators = [check(['text'], 'Field is required').notEmpty()];
-export const updateCommentValidators = [check(['text'], 'Field is required').notEmpty()];
+module.exports = {
+  createRequestValidators,
+  searchRequestValidators,
+  updateRequestValidators,
+  postCommentValidators,
+  updateCommentValidators
+};

@@ -1,7 +1,4 @@
-import jsonwebtoken from 'jsonwebtoken';
-const { verify } = jsonwebtoken;
-
-import { CustomError } from '../util/helpers.js';
+const verify = require('jsonwebtoken').verify;
 
 /**
  * Authorizes the request on the JWT that may or may not be attached to the request
@@ -9,10 +6,10 @@ import { CustomError } from '../util/helpers.js';
  * @param res
  * @param next
  */
-export const authToken = (req, res, next) => {
+const authToken = (req, res, next) => {
   const authHeader = req.headers['x-auth-token'];
   if (!authHeader) {
-    throw new CustomError(401, 'No token, not authorized');
+    res.status(401).json({ message: 'No token, not authorized' });
   }
 
   try {
@@ -25,7 +22,7 @@ export const authToken = (req, res, next) => {
 
     next();
   } catch (error) {
-    throw new CustomError(401, 'Token invalid');
+    res.status(401).json({ message: 'Token invalid' });
   }
 };
 
@@ -35,15 +32,15 @@ export const authToken = (req, res, next) => {
  * @param res
  * @param next
  */
-export const authRole = (req, _res, next) => {
+const authRole = (req, res, next) => {
   const role = req.user?.role;
 
   if (!role) {
-    throw new CustomError(401, 'No user role, not authorized');
+    return res.status(401).json({ message: 'No user role, not authorized' });
   }
 
-  if (role !== ROLES.ADMIN) {
-    throw new CustomError(401, 'User not administration, not authorized');
+  if (role !== 'admin') {
+    return res.status(401).json({ message: 'User not administration, not authorized' });
   }
 
   next();
@@ -57,7 +54,7 @@ export const authRole = (req, _res, next) => {
  * @param res
  * @param _next
  */
-export const errorHandler = (err, _req, res, _next) => {
+const errorHandler = (err, _req, res, _next) => {
   const errorResponse = {
     status: 'error',
     statusCode: err.statusCode,
@@ -70,4 +67,10 @@ export const errorHandler = (err, _req, res, _next) => {
   }
 
   res.status(err.statusCode || 500).json(errorResponse);
+};
+
+module.exports = {
+  authRole,
+  authToken,
+  errorHandler
 };

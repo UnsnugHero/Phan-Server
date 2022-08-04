@@ -1,16 +1,14 @@
-import path from 'path';
-import chalk from 'chalk';
-import express, { json } from 'express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
-import * as dotenv from 'dotenv';
+const chalk = require('chalk');
+const express = require('express');
+const json = express.json;
+const createServer = require('http').createServer;
+const Server = require('socket.io').Server;
 
-import { connectDB } from './util/database/index.js';
-// import { errorHandler } from './middleware/index.js';
-import router from './routers/index.js';
+const connectDB = require('./util/database/config');
+const errorHandler = require('./middleware/index').errorHandler;
 
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
+  require('dotenv').config();
 }
 
 // initialize server
@@ -26,6 +24,12 @@ const io = new Server(server, {
 // connect to database
 connectDB();
 
+// setup models
+require('./util/database/models/Comment');
+require('./util/database/models/Poll');
+require('./util/database/models/Request');
+require('./util/database/models/User');
+
 // attach middlewares
 app.use(json());
 
@@ -37,10 +41,10 @@ io.on('connection', (socket) => {
 });
 
 // append api/ before all routes
-app.use('/api', router);
+app.use('/api', require('./routers/index'));
 
 // error handler middleware - this must be after routes
-// app.use(errorHandler);
+app.use(errorHandler);
 
 // start server
 const port = process.env.PORT || 5000;

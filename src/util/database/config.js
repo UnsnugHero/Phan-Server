@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import chalk from 'chalk';
+const mongoose = require('mongoose');
+const chalk = require('chalk');
 
-export const connectDB = async () => {
+const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URL || '');
 
@@ -15,3 +15,5 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
+
+module.exports = connectDB;

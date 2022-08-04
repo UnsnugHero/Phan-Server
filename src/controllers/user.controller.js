@@ -1,10 +1,11 @@
-import { hash } from 'bcrypt';
-import omit from 'lodash.omit';
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const omit = require('lodash.omit');
 
-import { User } from '../util/database/models/index.js';
-import { CustomError, GenericServerError, signJWT } from '../util/helpers.js';
+const User = mongoose.model('User');
+const signJWT = require('../util/helpers');
 
-export async function getUser(req, res, next) {
+async function getUser(req, res, next) {
   const userId = req.user?.id;
 
   try {
@@ -16,17 +17,14 @@ export async function getUser(req, res, next) {
 
     return res.status(200).json({ message: 'Get user success', user });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'User not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function createNewUser(req, res, next) {
+async function createNewUser(req, res, next) {
   try {
     const { username, password, role } = req.body;
-    const encryptedPassword = await hash(password, 10);
+    const encryptedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
       username,
@@ -44,7 +42,7 @@ export async function createNewUser(req, res, next) {
   }
 }
 
-export async function updateUser(req, res, next) {
+async function updateUser(req, res, next) {
   const userId = req.params.userId;
 
   try {
@@ -53,23 +51,24 @@ export async function updateUser(req, res, next) {
 
     return res.status(200).json(omit(updatedUser.toObject(), ['password']));
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'User not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
 
-export async function deleteUser(req, res, next) {
+async function deleteUser(req, res, next) {
   const userId = req.params.userId;
 
   try {
     await User.findByIdAndDelete(userId);
     return res.status(200).json({ message: 'User successfully deleted' });
   } catch (error) {
-    if (error.kind === 'ObjectId') {
-      next(new CustomError(404, 'User not found'));
-    }
-    next(new GenericServerError(error));
+    next(error);
   }
 }
+
+module.exports = {
+  getUser,
+  createNewUser,
+  updateUser,
+  deleteUser
+};
