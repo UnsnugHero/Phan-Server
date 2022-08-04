@@ -1,6 +1,6 @@
-const expressValidator = require('express-validator');
+const check = require('express-validator').check;
 
 module.exports = [
-  expressValidator.check(['username', 'password'], 'Field is required').exists(),
-  expressValidator.check(['username', 'password'], 'Field cannot be empty').notEmpty()
+  check(['username', 'password'], 'Field is required').exists(),
+  check(['username', 'password'], 'Field cannot be empty').notEmpty()
 ];

@@ -1,16 +1,8 @@
-import { validationResult } from 'express-validator';
+const validationResult = require('express-validator').validationResult;
 
-import { loginValidators } from './auth.validators.js';
-import { createUserValidators, updateUserValidators } from './users.validators.js';
-import {
-  createRequestValidators,
-  postCommentValidators,
-  searchRequestValidators,
-  updateCommentValidators,
-  updateRequestValidators
-} from './request.validators.js';
-
-import { CustomError } from '../../util/helpers.js';
+const loginValidators = require('./auth.validators');
+const userValidators = require('./users.validators');
+const requestValidators = require('./request.validators');
 
 /**
  * Validator Map used to identify which middleware validators will be applied to the current route.
@@ -23,28 +15,27 @@ const validatorMap = (validatorType) => {
 
     // Request Validation
     case 'create_request':
-      return createRequestValidators;
+      return requestValidators.createRequestValidators;
     case 'search_request':
-      return searchRequestValidators;
+      return requestValidators.searchRequestValidators;
     case 'update_request':
-      return updateRequestValidators;
-
+      return requestValidators.updateRequestValidators;
     case 'post_comment':
-      return postCommentValidators;
+      return requestValidators.postCommentValidators;
     case 'update_comment':
-      return updateCommentValidators;
+      return requestValidators.updateCommentValidators;
 
     // User Validation
     case 'create_user':
-      return createUserValidators;
+      return userValidators.createUserValidators;
     case 'update_user':
-      return updateUserValidators;
+      return userValidators.updateUserValidators;
     default:
       return [];
   }
 };
 
-export const validatorMiddleware = (validatorType) => {
+const validatorMiddleware = (validatorType) => {
   const validationErrorHandler = (req, _res, next) => {
     // check for validation errors
     const errors = validationResult(req);
@@ -58,3 +49,5 @@ export const validatorMiddleware = (validatorType) => {
 
   return [...validatorMap(validatorType), validationErrorHandler];
 };
+
+module.exports = validatorMiddleware;
