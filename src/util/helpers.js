@@ -7,7 +7,7 @@ const signJWT = (user) => {
     username: user.username
   };
 
-  return sign(jwtPayload, process.env.SECRET_KEY, { expiresIn: '24d' });
+  return sign(jwtPayload, process.env.SECRET_KEY, { expiresIn: '1d' });
 };
 
 module.exports = signJWT;
