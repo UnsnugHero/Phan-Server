@@ -1,10 +1,8 @@
-import { Router } from 'express';
+const router = require('express').Router();
 
-import { authToken } from '../middleware/index.js';
-import { RequestController } from '../controllers/index.js';
-import { validatorMiddleware } from '../middleware/validators/index.js';
-
-const router = Router();
+const authToken = require('../middleware/index').authToken;
+const validatorMiddleware = require('../middleware/validators/index');
+const RequestController = require('../controllers/request.controller');
 
 router.get('/:requestId', RequestController.getRequest);
 router.post('/create', [authToken, ...validatorMiddleware('create_request')], RequestController.createRequest);
@@ -23,4 +21,4 @@ router.put(
 );
 router.delete('/comment/:requestId/:commentId', authToken, RequestController.deleteComment);
 
-export default router;
+module.exports = router;

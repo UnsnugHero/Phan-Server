@@ -1,10 +1,8 @@
-import { Router } from 'express';
+const router = require('express').Router();
 
-import { authToken } from '../middleware/index.js';
-import { CommentController } from '../controllers/index.js';
-
-const router = Router();
+const authToken = require('../middleware/index').authToken;
+const CommentController = require('../controllers/comment.controller');
 
 router.post('/post', authToken, CommentController.postGeneralComment);
 
-export default router;
+module.exports = router;
