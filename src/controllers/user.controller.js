@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const omit = require('lodash.omit');
 
 const User = mongoose.model('User');
-const helpers = require('../util/helpers');
+const signJWT = require('../util/helpers');
 
 async function getUser(req, res, next) {
   const userId = req.user?.id;
@@ -34,7 +34,7 @@ async function createNewUser(req, res, next) {
 
     // get the JS object from the returned schema object and omit the password
     const newUserResponse = omit(newUser.toObject(), ['password']);
-    const authToken = helpers.signJWT(newUser);
+    const authToken = signJWT(newUser);
 
     res.status(200).json({ message: 'User successfully created', authToken, user: newUserResponse });
   } catch (error) {

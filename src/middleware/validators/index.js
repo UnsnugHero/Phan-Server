@@ -36,12 +36,12 @@ const validatorMap = (validatorType) => {
 };
 
 const validatorMiddleware = (validatorType) => {
-  const validationErrorHandler = (req, _res, next) => {
+  const validationErrorHandler = (req, res, next) => {
     // check for validation errors
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      throw new CustomError(400, 'Error validating request', undefined, errors);
+      return res.status(400).send('Error validating request');
     }
 
     next();

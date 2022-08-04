@@ -1,7 +1,6 @@
-import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+const mongoose = require('mongoose');
 
-export const generalCommentSchema = new Schema(
+export const generalCommentSchema = new mongoose.Schema(
   {
     content: {
       type: String,
@@ -15,4 +14,4 @@ export const generalCommentSchema = new Schema(
   { timestamps: true }
 );
 
-export const GeneralComment = model('GeneralComment', generalCommentSchema);
+mongoose.model('GeneralComment', generalCommentSchema);

@@ -3,7 +3,7 @@ const omit = require('lodash.omit');
 const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
-const helpers = require('../util/helpers');
+const signJWT = require('../util/helpers');
 
 async function login(req, res, next) {
   const { username, password } = req.body;
@@ -21,7 +21,7 @@ async function login(req, res, next) {
     }
 
     const loggedInUserResponse = omit(user.toObject(), ['password']);
-    const authToken = helpers.signJWT(user);
+    const authToken = signJWT(user);
 
     res.status(200).json({ message: 'Successfully logged in', authToken, user: loggedInUserResponse });
   } catch (error) {

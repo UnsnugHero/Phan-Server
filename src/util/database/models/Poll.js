@@ -1,7 +1,6 @@
-import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+const mongoose = require('mongoose');
 
-export const pollSchema = new Schema(
+export const pollSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -23,4 +22,4 @@ export const pollSchema = new Schema(
   { timestamps: true }
 );
 
-export const Poll = model('Poll', pollSchema);
+mongoose.model('Poll', pollSchema);
