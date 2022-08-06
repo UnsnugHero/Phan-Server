@@ -7,7 +7,10 @@ const Server = require('socket.io').Server;
 const connectDB = require('./util/database/config');
 const errorHandler = require('./middleware/index').errorHandler;
 
-if (process.env.NODE_ENV !== 'production') {
+const isProd = process.env.NODE_ENV === 'production';
+const ioOrigin = isProd ? 'http://p5phansite.com' : 'http://localhost:3000';
+
+if (!isProd) {
   require('dotenv').config();
 }
 
@@ -16,7 +19,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: ioOrigin,
     methods: ['GET', 'POST']
   }
 });
