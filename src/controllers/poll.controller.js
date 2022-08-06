@@ -9,7 +9,7 @@ async function getCurrentPoll(req, res, next) {
 
     const responseMessage = activePoll ? 'Current poll successfully retrieved' : 'No poll currently active';
 
-    res.status(200).json({
+    return res.status(200).json({
       message: responseMessage,
       poll: activePoll
     });
@@ -77,16 +77,13 @@ async function voteYesPoll(req, res, next) {
       votedPolls.push({ pollId, isYesVote: true });
     }
 
-    const updatedPoll = await Poll.findOneAndUpdate(
-      { _id: pollId },
-      {
-        $inc: { yesVotes: 1, noVotes: noVoteDecr }
-      }
-    );
+    await Poll.findByIdAndUpdate(pollId, {
+      $inc: { yesVotes: 1, noVotes: noVoteDecr }
+    });
 
     await User.findByIdAndUpdate(req.user.id, { votedPolls });
 
-    res.status(200).json({ message: `Successfully voted yes to poll`, poll: updatedPoll });
+    return res.status(200).json({ message: `Successfully voted yes to poll` });
   } catch (error) {
     next(error);
   }
@@ -101,7 +98,6 @@ async function voteNoPoll(req, res, next) {
 
     // check if user has voted for this poll already
     const idx = votedPolls.findIndex((poll) => poll.pollId === pollId);
-    debugger;
     if (idx > -1) {
       // have they already voted no? return error
       if (!votedPolls[idx].isYesVote) {
@@ -116,16 +112,13 @@ async function voteNoPoll(req, res, next) {
       votedPolls.push({ pollId, isYesVote: false });
     }
 
-    const updatedPoll = await Poll.findOneAndUpdate(
-      { _id: pollId },
-      {
-        $inc: { yesVotes: yesVoteDecr, noVotes: 1 }
-      }
-    );
+    await Poll.findByIdAndUpdate(pollId, {
+      $inc: { yesVotes: yesVoteDecr, noVotes: 1 }
+    });
 
     await User.findByIdAndUpdate(req.user.id, { votedPolls });
 
-    res.status(200).json({ message: `Successfully voted no to poll`, poll: updatedPoll });
+    return res.status(200).json({ message: `Successfully voted no to poll` });
   } catch (error) {
     next(error);
   }

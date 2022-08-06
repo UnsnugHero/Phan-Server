@@ -23,7 +23,7 @@ async function login(req, res, next) {
     const loggedInUserResponse = omit(user.toObject(), ['password']);
     const authToken = signJWT(user);
 
-    res.status(200).json({ message: 'Successfully logged in', authToken, user: loggedInUserResponse });
+    return res.status(200).json({ message: 'Successfully logged in', authToken, user: loggedInUserResponse });
   } catch (error) {
     next(error);
   }

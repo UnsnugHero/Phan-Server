@@ -36,7 +36,7 @@ async function createNewUser(req, res, next) {
     const newUserResponse = omit(newUser.toObject(), ['password']);
     const authToken = signJWT(newUser);
 
-    res.status(200).json({ message: 'User successfully created', authToken, user: newUserResponse });
+    return res.status(200).json({ message: 'User successfully created', authToken, user: newUserResponse });
   } catch (error) {
     next(error);
   }
