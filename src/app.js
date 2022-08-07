@@ -8,7 +8,7 @@ const connectDB = require('./util/database/config');
 const errorHandler = require('./middleware/index').errorHandler;
 
 const isProd = process.env.NODE_ENV === 'production';
-const ioOrigin = isProd ? 'http://p5phansite.com' : 'http://localhost:3000';
+const ioOrigin = isProd ? 'https://p5phansite.com' : 'http://localhost:3000';
 
 if (!isProd) {
   require('dotenv').config();
